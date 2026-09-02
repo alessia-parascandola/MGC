@@ -1,9 +1,13 @@
-package it.unicam.cs.mpgc.rpg126692;
+package it.unicam.cs.mpgc.rpg126692.personaggi;
+
+import it.unicam.cs.mpgc.rpg126692.dadi.DadoPersonaggio;
+import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
+import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 
 import java.util.List;
 
+// Classe usata per definire il personaggio il rispettivo dado
 public class PersonaggioFactory {
-    // Classe usata per collegare il personaggio al rispettivo dado
 
     public static Personaggio creaCook(){
         DadoPersonaggio dadoCook = new DadoPersonaggio(List.of(

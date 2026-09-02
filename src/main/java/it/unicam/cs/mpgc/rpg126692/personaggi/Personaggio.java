@@ -1,4 +1,7 @@
-package it.unicam.cs.mpgc.rpg126692;
+package it.unicam.cs.mpgc.rpg126692.personaggi;
+
+import it.unicam.cs.mpgc.rpg126692.dadi.DadoPersonaggio;
+import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 
 public class Personaggio {
     private int hp;
@@ -39,11 +42,9 @@ public class Personaggio {
     public void subisciDanno(int danno){
         hp = Math.max(0, hp - danno);
     }
-
     public void cura(int quantita){
         hp = Math.min(18, hp + quantita);
     }
-
     public boolean isSconfitto(){
         return hp <= 0;
     }

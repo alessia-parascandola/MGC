@@ -1,4 +1,4 @@
-package it.unicam.cs.mpgc.rpg126692;
+package it.unicam.cs.mpgc.rpg126692.dadi;
 
 public enum Simbolo {
     FORZA,
