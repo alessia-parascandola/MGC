@@ -1,24 +1,31 @@
 package it.unicam.cs.mpgc.rpg126692;
 
+import java.util.List;
+
 public class FacciaDado {
     // "private" su usa di default sugli attributi delle classi concrete normali per proteggere lo stato interno
-    private final Simbolo simbolo;
-    private final int danno;
+    private final List<Simbolo> simboli;
     private final boolean scudo;
 
-    public FacciaDado(Simbolo simbolo, int danno, boolean scudo){
-        this.simbolo = simbolo;
-        this.danno = danno;
+    public FacciaDado(List<Simbolo> simboli, boolean scudo){
+        //Vincolo 1: la lista deve contenere 1 o 2 simboli
+        if (simboli == null || simboli.isEmpty() || simboli.size() >2){
+            throw new IllegalArgumentException("Una faccia deve contenere 1 o 2 simboli!");
+        }
+
+        //Vincolo 2: lo scudo è presente solo su facce con 2 simboli
+        if (scudo && simboli.size() != 2){
+            throw new IllegalArgumentException("Lo scudo deve essere presente su una faccia doppia figura!");
+        }
+
+        this.simboli = simboli;
         this.scudo = scudo;
     }
 
-    //Metodi scritti in camelCase
-    public Simbolo getSimbolo(){
-        return simbolo;
+    public List<Simbolo> getSimboli(){
+        return simboli;
     }
-    public int getDanno(){
-        return danno;
-    }
+
     public boolean haScudo(){
         return scudo;
     }

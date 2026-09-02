@@ -3,7 +3,7 @@ package it.unicam.cs.mpgc.rpg126692;
 import java.util.List;
 import java.util.Random;
 
-    //classe astratta perchè funge solo da "padre"
+    //Classe astratta perchè fa solo da "padre"
     //<T> è un segnaposto: la classe gestisce il tipo T che decideranno i figli
 public abstract class Dado<T> {
     //"protected" si usa nelle classi astratte o padre quando vogliamo che un
