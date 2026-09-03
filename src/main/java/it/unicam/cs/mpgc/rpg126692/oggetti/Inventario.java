@@ -65,6 +65,17 @@ public class Inventario {
         }
     }
 
+    // L'inventario scansiona se tra le carte in mano c'è un'istanza di scudo
+    public int getRiduzioneDannoTotale() {
+        int riduzione = 0;
+        for (Oggetto obj : oggetti) {
+            if (obj instanceof Scudo) {
+                riduzione += ((Scudo) obj).getRiduzioneDanno();
+            }
+        }
+        return riduzione;
+    }
+
     // Getter
     public List<Oggetto> getOggetti() {
         return oggetti;

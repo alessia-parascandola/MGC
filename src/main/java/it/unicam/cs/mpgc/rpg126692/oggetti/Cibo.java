@@ -15,13 +15,13 @@ public class Cibo extends Oggetto{
     public void usa(Personaggio utilizzatore, CartaMostro mostro) {
         // 1. Controlliamo se gli HP sono già al massimo (18)
         if (utilizzatore.getHP() >= 18) {
-            System.out.println("⚠️ Hai già i Punti Vita al massimo! " + getNome() + " non è stato usato e rimane nel tuo inventario.");
+            System.out.println("Hai già i Punti Vita al massimo! " + getNome() + " non è stato usato e rimane nel tuo inventario.");
             return; // Interrompe l'esecuzione: il cibo NON viene consumato né rimosso
         }
 
         // 2. Appliciamo la cura
         utilizzatore.cura(this.puntiCura);
-        System.out.println("🍗 Hai consumato " + getNome() + " e hai recuperato " + puntiCura + " HP!");
+        System.out.println("Hai consumato " + getNome() + " e hai recuperato " + puntiCura + " HP!");
 
         // 3. Troviamo la posizione di QUESTO cibo nell'inventario e lo scartiamo
         int indice = utilizzatore.getInventario().getOggetti().indexOf(this);
