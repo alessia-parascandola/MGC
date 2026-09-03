@@ -1,6 +1,7 @@
-package it.unicam.cs.mpgc.rpg126692.oggetti;
+package it.unicam.cs.mpgc.rpg126692.oggetti.pozioni;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
+import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 public abstract class Pozione extends Oggetto {

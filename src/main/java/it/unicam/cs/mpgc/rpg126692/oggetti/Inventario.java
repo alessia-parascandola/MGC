@@ -22,6 +22,11 @@ public class Inventario {
         return maniUsate;
     }
 
+    // Calcola quanti slot mano sono ancora liberi
+    public int getManiLibere() {
+        return MAX_MANI - getManiOccupate();
+    }
+
     // Controlla se un nuovo oggetto può essere impugnato senza superare le 2 mani
     public boolean puoContenere(Oggetto nuovoOggetto){
         int maniRichieste = 1;

@@ -1,6 +1,14 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti;
 
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
+import it.unicam.cs.mpgc.rpg126692.oggetti.pozioni.PozioneEvasione;
+import it.unicam.cs.mpgc.rpg126692.oggetti.pozioni.PozioneFortuna;
+import it.unicam.cs.mpgc.rpg126692.oggetti.pozioni.PozioneIntuizione;
+import it.unicam.cs.mpgc.rpg126692.oggetti.pozioni.PozioneSimbolo;
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.FrammentoDellaFuria;
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.PietreDellaDuplicazione;
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.RunaDiRengorn;
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.VersettiCurativi;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +57,10 @@ public class MazzoOggetti {
         carte.add(new Scudo("Scudo marcito.", "Quando stai per perdere punti vita, riduci la perdita di 1.", 1));
 
         // --- Reliquie ---
+        carte.add(new VersettiCurativi("Versetti .", "Quando ottieni un risultato doppio con un dado, puoi dare un punto vita a qualsiasi personaggio."));
+        carte.add(new FrammentoDellaFuria("Frammento della furia.", "Una volta per turno di combattimento, quando ottieni un doppio con un dado, puoi tirarlo ancora e applicare entrambi i risultati."));
+        carte.add(new PietreDellaDuplicazione("Pietre della duplicazione.", "Quando ottieni un risultato singolo con un dado, questo vale come due singoli di quella caratteristica."));
+        carte.add(new RunaDiRengorn("Runa di Rengorn.","Quando ottieni un risultato doppio con un dado, puoi cambiarlo in un qualsiasi risultato singolo."));
 
         // Mescoliamo il mazzo all'inizio del gioco
         Collections.shuffle(carte);
