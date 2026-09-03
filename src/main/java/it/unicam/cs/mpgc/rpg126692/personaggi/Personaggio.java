@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg126692.personaggi;
 
 import it.unicam.cs.mpgc.rpg126692.dadi.DadoPersonaggio;
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
+import it.unicam.cs.mpgc.rpg126692.oggetti.Inventario;
 
 public class Personaggio {
     private int hp;
@@ -10,6 +11,7 @@ public class Personaggio {
     private final int astuzia;
     private final int saggezza;
     private final DadoPersonaggio dado;
+    private Inventario inventario;
 
     public Personaggio(int hp, String nome, int forza, int astuzia, int saggezza, DadoPersonaggio dado){
         if(hp <= 0 || hp > 18){
@@ -28,6 +30,7 @@ public class Personaggio {
         this.astuzia = astuzia;
         this.saggezza = saggezza;
         this.dado = dado;
+        this.inventario = new Inventario();     // Crea un inventario vuoto all'inizio
     }
 
     // Getter
@@ -37,6 +40,7 @@ public class Personaggio {
     public int getAstuzia(){ return astuzia; }
     public int getSaggezza(){ return saggezza; }
     public DadoPersonaggio getDado() { return dado; }
+    public Inventario getInventario(){ return inventario; }
 
     // Metodi per gestire la salute
     public void subisciDanno(int danno){
