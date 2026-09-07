@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg126692.carte;
 
+import it.unicam.cs.mpgc.rpg126692.carte.Boss.*;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 
 import java.util.ArrayList;
@@ -22,6 +23,11 @@ public class MazzoCapitoli {
         // Carte Evento
 
         // Carte Boss
+        carteCapitolo.add(new TerroreDelSottosuolo());
+        carteCapitolo.add(new SacerdotessaFolle());
+        carteCapitolo.add(new LOscuro());
+        carteCapitolo.add(new SignoreDelleTenebre());
+        carteCapitolo.add(new Mutaforma());
     }
 
     public CartaIntro getCartaIntro(){

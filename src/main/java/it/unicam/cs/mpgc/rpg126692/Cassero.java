@@ -1,6 +1,6 @@
 package it.unicam.cs.mpgc.rpg126692;
 
-import it.unicam.cs.mpgc.rpg126692.carte.CartaBoss;
+import it.unicam.cs.mpgc.rpg126692.carte.Boss.CartaBoss;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaCapitolo;
 import it.unicam.cs.mpgc.rpg126692.carte.MazzoCapitoli;
 

@@ -88,4 +88,14 @@ public class Inventario {
     public boolean isVuoto() {
         return oggetti.isEmpty();
     }
+
+    public void svuotaInventario() {
+        if (oggetti.isEmpty()){
+            System.out.println("Non hai nulla nelle mani.");
+        }
+        else {
+            oggetti.clear();
+            System.out.println("Tutti gli oggetti nelle tue mani sono stati scartati!");
+        }
+    }
 }
