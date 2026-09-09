@@ -14,7 +14,7 @@ public class EventoRicompensaDiretta extends CartaEvento {
     }
 
     @Override
-    public void esegui(Personaggio personaggio) {
+    public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
         System.out.println(getDescrizione());
     }
 

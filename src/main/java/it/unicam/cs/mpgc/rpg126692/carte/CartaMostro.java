@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.rpg126692.carte;
 import it.unicam.cs.mpgc.rpg126692.GestoreCombattimento;
 import it.unicam.cs.mpgc.rpg126692.dadi.DadoCapitolo;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
+import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class CartaMostro extends CartaCapitolo{
     }
 
     @Override
-    public void esegui(Personaggio personaggio) {
+    public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
         System.out.println(getDescrizione());
 
         // Usa il costruttore vuoto (senza niente tra le parentesi)

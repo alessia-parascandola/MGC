@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg126692.carte.Eventi;
 
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
+import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 import java.util.List;
 import java.util.Random;
@@ -14,7 +15,7 @@ public class EventoPioggiaAcido extends CartaEvento{
     }
 
     @Override
-    public void esegui(Personaggio personaggio) {
+    public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
         System.out.println(getDescrizione());
     }
 

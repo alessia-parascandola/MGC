@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg126692.carte;
 
+import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 public class CartaIntro extends CartaCapitolo {
@@ -17,7 +18,7 @@ public class CartaIntro extends CartaCapitolo {
     // Implementa il metodo astratto esegui() di CartaCapitolo, definendo
     // il comportamento specifico della Carta Intro quando viene giocata (Polimorfismo).
     @Override
-    public void esegui(Personaggio personaggio) {
+    public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
         System.out.println(getDescrizione());
     }
 }

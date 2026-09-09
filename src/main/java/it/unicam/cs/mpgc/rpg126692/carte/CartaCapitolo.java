@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg126692.carte;
 
+import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 public abstract class CartaCapitolo {
@@ -19,6 +20,5 @@ public abstract class CartaCapitolo {
     }
 
     // Metodo astratto che ogni stanza/evento implementa per agire sul personaggio
-     public abstract void esegui(Personaggio personaggio);
-}
+    public abstract void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti);}
 

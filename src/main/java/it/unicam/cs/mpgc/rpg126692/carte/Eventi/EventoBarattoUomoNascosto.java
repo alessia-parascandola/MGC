@@ -3,6 +3,7 @@ package it.unicam.cs.mpgc.rpg126692.carte.Eventi;
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
+import java.util.Scanner;
 
 public class EventoBarattoUomoNascosto extends CartaEvento{
 
@@ -15,37 +16,53 @@ public class EventoBarattoUomoNascosto extends CartaEvento{
     }
 
     @Override
-    public void esegui(Personaggio personaggio) {
+    public void esegui(Personaggio personaggio, MazzoOggetti mazzo) {
+        System.out.println("\n--- EVENTO: L'UOMO NASCOSTO ---");
         System.out.println(getDescrizione());
-    }
 
-    // Riceve l'opzione e l'indice dell'oggetto da scartare se si sceglie il baratto
-    public void risolviScelta(int opzione, int indiceOggettoDaScartare, Personaggio p, MazzoOggetti mazzo) {
-        // Opzione 1: Baratto (richiede la presenza di almeno un oggetto)
-        if (opzione == 1) {
-            if (p.getInventario().isVuoto()) {
-                System.out.println("Non hai oggetti da barattare!");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("\nFai la tua scelta (1 o 2): ");
+        String input = scanner.nextLine().trim();
+
+        if (input.equals("1")) {
+            if (personaggio.getInventario().isVuoto()) {
+                System.out.println("Non hai oggetti da barattare! L'uomo scuote la testa e se ne va.");
                 return;
             }
-            // Scarta l'oggetto scelto dall'utente e pesca 2 oggetti dal mazzo
-            p.getInventario().scarta(indiceOggettoDaScartare);
-            System.out.println("Hai barattato un oggetto! Peschi 2 nuovi oggetti.");
-            for (int i = 0; i < 2; i++) {
-                if (!mazzo.isVuoto()) p.getInventario().aggiungi(mazzo.pesca());
-            }
-        }
-        // Opzione 2: Trattativa tramite prova di dadi
-        else if (opzione == 2) {
-            System.out.println("Tenti di trattare! Fai una prova su DOPPIO...");
-            FacciaDado faccia = p.lanciaDado();
 
-            // Se esce un doppio, pesca 1 oggetto gratis senza scartare nulla
+            System.out.println("\nQuale oggetto vuoi scartare?");
+            for (int i = 0; i < personaggio.getInventario().getOggetti().size(); i++) {
+                System.out.println("[" + (i + 1) + "] " + personaggio.getInventario().getOggetti().get(i).getNome());
+            }
+            System.out.print("> ");
+
+            try {
+                int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                if (idx >= 0 && idx < personaggio.getInventario().getOggetti().size()) {
+                    personaggio.getInventario().scarta(idx);
+                    System.out.println("Hai barattato l'oggetto! Peschi 2 nuovi oggetti.");
+                    for (int i = 0; i < 2; i++) {
+                        if (!mazzo.isVuoto()) personaggio.getInventario().aggiungi(mazzo.pesca());
+                    }
+                } else {
+                    System.out.println("Scelta non valida, l'uomo si spazientisce e se ne va!");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Input non valido! L'evento termina.");
+            }
+
+        } else if (input.equals("2")) {
+            System.out.println("\nTenti di trattare! Fai una prova su DOPPIO...");
+            FacciaDado faccia = personaggio.lanciaDado();
+
             if (faccia.isDoppio()) {
-                System.out.println("SUCCESSO: La tua parlantina ti premia! Pesca 1 Oggetto.");
-                if (!mazzo.isVuoto()) p.getInventario().aggiungi(mazzo.pesca());
+                System.out.println("SUCCESSO: La tua parlantina ti premia! Peschi 1 Oggetto.");
+                if (!mazzo.isVuoto()) personaggio.getInventario().aggiungi(mazzo.pesca());
             } else {
                 System.out.println("FALLIMENTO: Il tuo tentativo è inutile, non ottieni nulla.");
             }
+        } else {
+            System.out.println("Scelta non valida! Prosegui oltre ignorando l'uomo.");
         }
     }
 }

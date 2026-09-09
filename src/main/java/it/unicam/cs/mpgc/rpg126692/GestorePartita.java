@@ -49,7 +49,7 @@ public class GestorePartita {
             }
 
             // Esecuzione carta
-            carta.esegui(giocatore);
+            carta.esegui(giocatore, mazzoOggetti);
 
             // Controllo sconfitta immediato
             if (giocatore.isSconfitto()) {
