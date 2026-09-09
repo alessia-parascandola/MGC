@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg126692.carte;
 
+import it.unicam.cs.mpgc.rpg126692.GestoreCombattimento;
 import it.unicam.cs.mpgc.rpg126692.dadi.DadoCapitolo;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
@@ -59,8 +60,10 @@ public class CartaMostro extends CartaCapitolo{
     @Override
     public void esegui(Personaggio personaggio) {
         System.out.println(getDescrizione());
-        System.out.println("=== INIZIA IL COMBATTIMENTO ===");
-        System.out.println("Danno del mostro: " + danno + " HP");
-        System.out.println("Tracciato simboli da eliminare: " + tracciatoSimboli);
+
+        // Usa il costruttore vuoto (senza niente tra le parentesi)
+        DadoCapitolo dadoCapitolo = new DadoCapitolo();
+        GestoreCombattimento gestore = new GestoreCombattimento();
+        gestore.combatti(personaggio, this, dadoCapitolo);
     }
 }

@@ -99,4 +99,12 @@ public class Personaggio {
         // 3. Se il ciclo finisce e non l'ha trovata, restituisce null
         return null;
     }
+
+    public boolean eVivo() {
+        return this.hp > 0;
+    }
+
+    public int getSaluteMassima(){
+        return 18;
+    }
 }

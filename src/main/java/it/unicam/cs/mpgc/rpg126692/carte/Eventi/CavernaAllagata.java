@@ -10,7 +10,7 @@ public class CavernaAllagata extends CartaEvento{
         super("Questo corridoio porta a una rampa di vecchi scalini di pietra. \n" +
                 "Scendono verso una caverna allagata. L'acqua è torbida, ma una \n" +
                 "tenue luce si distingue nelle profondità. Prendi un respiro profondo \n" +
-                "e ti tuffi, nuotando verso la luce." +
+                "e ti tuffi, nuotando verso la luce. \n" +
                 "Ottieni un DOPPIO entro 3 tentativi per riemergere!");
     }
 

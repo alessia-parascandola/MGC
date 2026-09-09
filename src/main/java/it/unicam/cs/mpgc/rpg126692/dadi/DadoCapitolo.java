@@ -18,13 +18,4 @@ public class DadoCapitolo extends Dado<Simbolo>{
                 Simbolo.SAGGEZZA, Simbolo.SAGGEZZA
         ));
     }
-
-    /* TEST PER VEDERE SE FUNZIONA:
-    public static void main(String[] args) {
-        DadoCapitolo dadoCapitolo = new DadoCapitolo(); // Crei l'oggetto
-        Simbolo risultato = dadoCapitolo.lancia();     // Chiami il metodo ereditato dal padre
-
-        System.out.println("Risultato lancio: " + risultato);
-    } */
-
 }
