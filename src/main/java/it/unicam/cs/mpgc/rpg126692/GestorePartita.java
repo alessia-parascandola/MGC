@@ -1,36 +1,27 @@
 package it.unicam.cs.mpgc.rpg126692;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaCapitolo;
-import it.unicam.cs.mpgc.rpg126692.carte.Boss.CartaBoss;
-import it.unicam.cs.mpgc.rpg126692.carte.CartaIntro;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
+import it.unicam.cs.mpgc.rpg126692.carte.Boss.CartaBoss;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class GestorePartita {
 
     private final Personaggio giocatore;
-    private final CartaIntro intro;
-    private final List<CartaCapitolo> mazzoCapitoli; // Le 15 carte mescolate
-    private final CartaBoss boss;
+    private final Cassero cassero;
     private final MazzoOggetti mazzoOggetti;
     private final Scanner scanner;
 
-    public GestorePartita(Personaggio giocatore, CartaIntro intro, List<CartaCapitolo> capitoli, CartaBoss boss, MazzoOggetti mazzoOggetti) {
+    public GestorePartita(Personaggio giocatore, Cassero cassero, MazzoOggetti mazzoOggetti) {
         this.giocatore = giocatore;
-        this.intro = intro;
-        this.mazzoCapitoli = capitoli;
-        this.boss = boss;
+        this.cassero = cassero;
         this.mazzoOggetti = mazzoOggetti;
         this.scanner = new Scanner(System.in);
-
-        // Preparazione mazzo Cassero: mescola le 15 carte capitolo
-        Collections.shuffle(this.mazzoCapitoli);
     }
 
     public void avviaPartita() {
@@ -38,17 +29,23 @@ public class GestorePartita {
         System.out.println("      BENVENUTO IN: FUGA DAL CASSERO      ");
         System.out.println("=========================================");
 
-        // 1. Mostra Intro
-        intro.esegui(giocatore);
-        attendiInvio();
-
-        // 2. Ciclo del mazzo Cassero (15 Carte Capitolo)
         int numeroTurno = 1;
-        for (CartaCapitolo carta : mazzoCapitoli) {
-            mostraDashboard();
-            System.out.println("\n---> CAPITOLO " + numeroTurno + " / 15 <---");
 
-            // Esecuzione della carta
+        // Pesca ed esegue le carte dallo stack Cassero finché ce ne sono
+        while (cassero.haCarte()) {
+            CartaCapitolo carta = cassero.pescaProssimaCarta();
+
+            mostraDashboard();
+
+            if (carta instanceof CartaBoss) {
+                System.out.println("\n=========================================");
+                System.out.println("         SCONTRO FINALE CON IL BOSS       ");
+                System.out.println("=========================================");
+            } else if (numeroTurno > 1) {
+                System.out.println("\n---> CAPITOLO " + (numeroTurno - 1) + " / 15 <---");
+            }
+
+            // Esecuzione carta
             carta.esegui(giocatore);
 
             // Controllo sconfitta immediato
@@ -57,11 +54,9 @@ public class GestorePartita {
                 return;
             }
 
-            // Controlla se la carta è un mostro ed è stato sconfitto
+            // Ricompensa se si sconfigge un mostro
             if (carta instanceof CartaMostro) {
                 CartaMostro cartaMostro = (CartaMostro) carta;
-
-                // Se il tracciato dei simboli è vuoto, il mostro è stato sconfitto!
                 if (cartaMostro.getTracciatoSimboli().isEmpty()) {
                     assegnaRicompensaOggetto();
                 }
@@ -71,23 +66,12 @@ public class GestorePartita {
             attendiInvio();
         }
 
-        // 3. Scontro Finale con il Boss
-        mostraDashboard();
-        System.out.println("\n=========================================");
-        System.out.println("         SCONTRO FINALE CON IL BOSS       ");
-        System.out.println("=========================================");
-        boss.esegui(giocatore);
-
-        if (giocatore.isSconfitto()) {
-            gestisciGameOver();
-        } else {
-            System.out.println("\n*****************************************");
-            System.out.println("         FUGA RIUSCITA! HAI VINTO!       ");
-            System.out.println("*****************************************");
-        }
+        // Se sopravvissuto a tutte le carte compreso il Boss
+        System.out.println("\n*****************************************");
+        System.out.println("         FUGA RIUSCITA! HAI VINTO!       ");
+        System.out.println("*****************************************");
     }
 
-    // Metodo per rendere SEMPRE VISIBILI le statistiche e l'inventario
     private void mostraDashboard() {
         System.out.println("\n======================================================================");
         System.out.println(" PERSONAGGIO: " + giocatore.getNome() + " | HP: [" + giocatore.getHP() + "/18]");
@@ -96,7 +80,7 @@ public class GestorePartita {
                 " | Saggezza: " + giocatore.getSaggezza());
 
         List<Oggetto> oggetti = giocatore.getInventario().getOggetti();
-        String manoDestra = (oggetti.size() > 0) ? oggetti.get(0).getNome() : "Vuota";
+        String manoDestra = (!oggetti.isEmpty()) ? oggetti.get(0).getNome() : "Vuota";
         String manoSinistra = (oggetti.size() > 1) ? oggetti.get(1).getNome() : "Vuota";
 
         System.out.println(" EQUIPAGGIAMENTO:");

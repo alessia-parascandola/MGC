@@ -116,11 +116,11 @@ public class MazzoCapitoli {
 
 
         // Carte Boss
-        carteCapitolo.add(new TerroreDelSottosuolo());
-        carteCapitolo.add(new SacerdotessaFolle());
-        carteCapitolo.add(new LOscuro());
-        carteCapitolo.add(new SignoreDelleTenebre());
-        carteCapitolo.add(new Mutaforma());
+        carteBoss.add(new TerroreDelSottosuolo());
+        carteBoss.add(new SacerdotessaFolle());
+        carteBoss.add(new LOscuro());
+        carteBoss.add(new SignoreDelleTenebre());
+        carteBoss.add(new Mutaforma());
     }
 
     public CartaIntro getCartaIntro(){
