@@ -109,6 +109,10 @@ public class MazzoCapitoli {
         carteCapitolo.add(new EventoStormoDiPipistrelli());
         carteCapitolo.add(new EventoStanzaDelTorturatore());
         carteCapitolo.add(new EventoTorreCampanaria());
+        carteCapitolo.add(new CavernaAllagata());
+        carteCapitolo.add(new EventoPioggiaAcido());
+        carteCapitolo.add(new EventoIntriganteStraniero());
+        carteCapitolo.add(new EventoBarattoUomoNascosto());
 
 
         // Carte Boss
