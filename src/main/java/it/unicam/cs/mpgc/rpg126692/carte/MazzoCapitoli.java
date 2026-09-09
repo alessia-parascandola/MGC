@@ -24,8 +24,8 @@ public class MazzoCapitoli {
         carteCapitolo.add(new CartaMostro("Questa sala è fiancheggiata da grotte e disseminata di ossa masticate. \n" +
                 "Un verso gutturale risuona mentre quacosa emerge dall'ombra.", List.of(Simbolo.FORZA, Simbolo.FORZA, Simbolo.ASTUZIA), 2));
         carteCapitolo.add(new CartaMostro("Mentre questre tre megere si avvicinano, noti che i loro piedi non toccano \n" +
-                "il terreno. Con una risata stridula, si protendono verso di te cercandoti con mani rinescchite e lingue marcescenti.",
-                List.of(Simbolo.SAGGEZZA), 1));
+                "il terreno. Con una risata stridula, si protendono verso di te \n" +
+                "cercandoti con mani rinescchite e lingue marcescenti.", List.of(Simbolo.SAGGEZZA), 1));
         carteCapitolo.add(new CartaMostro("Un nobiluomo sembra fuori posto girovagando nelle viscere del castello. \n" +
                 "Offre una ricompensa se prometti di non dire a nessuno di averlo visto. Mentre parli si copre il naso, \n" +
                 "visibilmente disgustato dalla tua presenza. Non si fida di te.", List.of(Simbolo.ASTUZIA), 1));
@@ -46,7 +46,7 @@ public class MazzoCapitoli {
         carteCapitolo.add(new CartaMostro("Affrettandoti in questa sala illuminata da candele, interrompi una \n" +
                 "cerimonia sacrificale. Un uomo in una tunica e con una maschera \n" +
                 "funeraria dichiara che anche tu ora dovrai essere sacrificato.", List.of(Simbolo.FORZA, Simbolo.SAGGEZZA), 2));
-        carteCapitolo.add(new CartaMostro("Il tando di sterco impregna l'aria mentre entri in questa sala \n" +
+        carteCapitolo.add(new CartaMostro("Il tanfo di sterco impregna l'aria mentre entri in questa sala \n" +
                 "fiancheggiata da stalle. Una bestia da soma agitata si è liberata \n" +
                 "dalla sua gabbia e ti blocca il passaggio. E' messa all'angolo, le sue \n" +
                 "possenti corna pronte a straziare chiunque si avvicini.", List.of(Simbolo.ASTUZIA), 2));
