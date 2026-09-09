@@ -36,19 +36,30 @@ public class GestorePartita {
             CartaCapitolo carta = cassero.pescaProssimaCarta();
 
             System.out.println("\n======================================================================\n");
+
+            // CASO 1: Carta Intro (Stanza 0)
+            if (numeroStanza == 0) {
+                System.out.println("---> INTRODUZIONE <---");
+
+                // La carta si occupa già di stampare il testo e attendere l'INVIO dell'utente
+                carta.esegui(giocatore, mazzoOggetti);
+
+                numeroStanza++;
+                continue; // Passa subito alla Stanza 1 senza mostrare il menu interazione
+            }
+
+            // CASO 2: Stanze Normali e Boss (Mostra la Dashboard completa)
             mostraDashboard();
 
             if (carta instanceof CartaBoss) {
                 System.out.println("\n=========================================");
                 System.out.println("         SCONTRO FINALE CON IL BOSS       ");
                 System.out.println("=========================================");
-            } else if (numeroStanza == 0) {
-                System.out.println("\n---> INTRODUZIONE <---");
             } else {
                 System.out.println("\n---> STANZA " + numeroStanza + " / 15 <---");
             }
 
-            // Esecuzione carta
+            // Esecuzione carta normale
             carta.esegui(giocatore, mazzoOggetti);
 
             // Controllo sconfitta immediato
@@ -66,7 +77,7 @@ public class GestorePartita {
 
             numeroStanza++;
 
-            // Menù di interazione tra una stanza e l'altra (solo se ancora in vita)
+            // Menù di interazione tra una stanza e l'altra (solo dalla stanza 1 in poi)
             if (cassero.haCarte() && giocatore.eVivo()) {
                 mostraMenuInterazione();
             }
@@ -112,20 +123,20 @@ public class GestorePartita {
 
         List<Oggetto> inventario = giocatore.getInventario().getOggetti();
 
-        // Se l'inventario ha già 2 oggetti, mostriamo il menu dedicato
+        // Se l'inventario ha già 2 oggetti, mostriamo le 2 opzioni compattate
         if (inventario.size() >= 2) {
-            System.out.println("\nIl tuo inventario è pieno! Scegli quale oggetto tenere:");
-            System.out.println("[1] Tieni " + inventario.get(0).getNome() + " (Mano Destra)");
-            System.out.println("[2] Tieni " + inventario.get(1).getNome() + " (Mano Sinistra)");
-            System.out.println("[3] Prendi " + nuovoOggetto.getNome() + " (Scarta uno dei vecchi)");
+            System.out.println("\nIl tuo inventario è pieno! Scegli un'azione:");
+            System.out.println("[1] Mantieni i tuoi oggetti attuali (" + inventario.get(0).getNome() + ", " + inventario.get(1).getNome() + ") e lascia " + nuovoOggetto.getNome());
+            System.out.println("[2] Prendi " + nuovoOggetto.getNome() + " e scarta uno dei vecchi");
             System.out.print("> ");
 
             String scelta = scanner.nextLine().trim();
 
-            if (scelta.equals("3")) {
-                System.out.println("\nQuale vuoi sostituire?");
-                System.out.println("[1] Sostituisci " + inventario.get(0).getNome());
-                System.out.println("[2] Sostituisci " + inventario.get(1).getNome());
+            if (scelta.equals("2")) {
+                // Sottomenu: Scegli quale dei due vecchi oggetti sostituire
+                System.out.println("\nQuale oggetto vuoi sostituire?");
+                System.out.println("[1] Sostituisci " + inventario.get(0).getNome() + " (Mano Destra)");
+                System.out.println("[2] Sostituisci " + inventario.get(1).getNome() + " (Mano Sinistra)");
                 System.out.print("> ");
 
                 String subScelta = scanner.nextLine().trim();
@@ -134,13 +145,13 @@ public class GestorePartita {
                 Oggetto scartato = inventario.get(idxScartare);
                 giocatore.getInventario().scarta(idxScartare);
                 giocatore.getInventario().aggiungi(nuovoOggetto);
-                System.out.println("Hai scartato " + scartato.getNome() + " e equipaggiato " + nuovoOggetto.getNome() + "!");
+                System.out.println("Hai scartato " + scartato.getNome() + " ed equipaggiato " + nuovoOggetto.getNome() + "!");
             } else {
-                System.out.println("Hai lasciato a terra: " + nuovoOggetto.getNome());
+                System.out.println("Hai lasciato a terra " + nuovoOggetto.getNome() + " e mantenuto i tuoi oggetti.");
             }
         } else {
             giocatore.getInventario().aggiungi(nuovoOggetto);
-            System.out.println("Oggetto aggiunto al tuo inventario!");
+            // Qui viene aggiunto se hai spazio nell'inventario
         }
     }
 
