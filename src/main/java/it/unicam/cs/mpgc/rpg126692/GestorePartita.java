@@ -29,20 +29,23 @@ public class GestorePartita {
         System.out.println("      BENVENUTO IN: FUGA DAL CASSERO      ");
         System.out.println("=========================================");
 
-        int numeroTurno = 1;
+        int numeroStanza = 0;        // Parte da 0 per gestire la carta Intro
 
         // Pesca ed esegue le carte dallo stack Cassero finché ce ne sono
         while (cassero.haCarte()) {
             CartaCapitolo carta = cassero.pescaProssimaCarta();
 
+            System.out.println("\n======================================================================\n");
             mostraDashboard();
 
             if (carta instanceof CartaBoss) {
                 System.out.println("\n=========================================");
                 System.out.println("         SCONTRO FINALE CON IL BOSS       ");
                 System.out.println("=========================================");
-            } else if (numeroTurno > 1) {
-                System.out.println("\n---> CAPITOLO " + (numeroTurno - 1) + " / 15 <---");
+            } else if (numeroStanza == 0) {
+                System.out.println("\n---> INTRODUZIONE <---");
+            } else {
+                System.out.println("\n---> STANZA " + numeroStanza + " / 15 <---");
             }
 
             // Esecuzione carta
@@ -55,15 +58,18 @@ public class GestorePartita {
             }
 
             // Ricompensa se si sconfigge un mostro
-            if (carta instanceof CartaMostro) {
-                CartaMostro cartaMostro = (CartaMostro) carta;
+            if (carta instanceof CartaMostro cartaMostro) {
                 if (cartaMostro.getTracciatoSimboli().isEmpty()) {
                     assegnaRicompensaOggetto();
                 }
             }
 
-            numeroTurno++;
-            attendiInvio();
+            numeroStanza++;
+
+            // Menù di interazione tra una stanza e l'altra (solo se ancora in vita)
+            if (cassero.haCarte() && giocatore.eVivo()) {
+                mostraMenuInterazione();
+            }
         }
 
         // Se sopravvissuto a tutte le carte compreso il Boss
@@ -80,8 +86,14 @@ public class GestorePartita {
                 " | Saggezza: " + giocatore.getSaggezza());
 
         List<Oggetto> oggetti = giocatore.getInventario().getOggetti();
-        String manoDestra = (!oggetti.isEmpty()) ? oggetti.get(0).getNome() : "Vuota";
-        String manoSinistra = (oggetti.size() > 1) ? oggetti.get(1).getNome() : "Vuota";
+
+        // Mostra Nome + Descrizione
+        String manoDestra = (!oggetti.isEmpty())
+                ? oggetti.get(0).getNome() + " (" + oggetti.get(0).getDescrizione() + ")"
+                : "Vuota";
+        String manoSinistra = (oggetti.size() > 1)
+                ? oggetti.get(1).getNome() + " (" + oggetti.get(1).getDescrizione() + ")"
+                : "Vuota";
 
         System.out.println(" EQUIPAGGIAMENTO:");
         System.out.println("   [Mano Destra]  : " + manoDestra);
@@ -97,15 +109,60 @@ public class GestorePartita {
         }
     }
 
+    // Menù Esplorazione
+    private void mostraMenuInterazione() {
+        while (true) {
+            System.out.println("\n---------------------------------");
+            System.out.println("Scegli un'azione:");
+            System.out.println("[1] Usa un oggetto consumabile");
+            System.out.println("[INVIO] Accedi alla prossima stanza");
+            System.out.print("> ");
+
+            String scelta = scanner.nextLine().trim();
+
+            if (scelta.equals("1")) {
+                gestisciUsoOggetto();
+                mostraDashboard(); // Aggiorna la vista dopo aver usato l'oggetto
+            } else if (scelta.isEmpty()) {
+                break; // Prosegue al turno successivo
+            } else {
+                System.out.println("Scelta non valida!");
+            }
+        }
+    }
+
+    private void gestisciUsoOggetto() {
+        List<Oggetto> oggetti = giocatore.getInventario().getOggetti();
+
+        if (oggetti.isEmpty()) {
+            System.out.println("Non hai oggetti nell'inventario!");
+            return;
+        }
+
+        System.out.println("\n--- USA OGGETTO ---");
+        for (int i = 0; i < oggetti.size(); i++) {
+            Oggetto obj = oggetti.get(i);
+            System.out.println("[" + (i + 1) + "] " + obj.getNome() + " - " + obj.getDescrizione());
+        }
+        System.out.println("[0] Annulla");
+        System.out.print("Scegli l'oggetto da usare: ");
+
+        String input = scanner.nextLine().trim();
+        try {
+            int indice = Integer.parseInt(input) - 1;
+            if (indice >= 0 && indice < oggetti.size()) {
+                Oggetto daUsare = oggetti.get(indice);
+                daUsare.usa(giocatore, null);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Inserisci un numero valido.");
+        }
+    }
+
     private void gestisciGameOver() {
         System.out.println("\n=========================================");
         System.out.println("               GAME OVER                 ");
         System.out.println("  Sei caduto tra le ombre del Cassero... ");
         System.out.println("=========================================");
-    }
-
-    private void attendiInvio() {
-        System.out.println("\n[Premi INVIO per proseguire...]");
-        scanner.nextLine();
     }
 }

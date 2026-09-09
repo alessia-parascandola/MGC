@@ -6,6 +6,7 @@ import it.unicam.cs.mpgc.rpg126692.dadi.DadoCapitolo;
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
+import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 
 import java.util.List;
 import java.util.Scanner;
@@ -33,8 +34,22 @@ public class GestoreCombattimento {
         while (!mostro.eSconfitto() && personaggio.eVivo()) {
             System.out.println("\nHP Personaggio: " + personaggio.getHP() + "/" + personaggio.getSaluteMassima());
             System.out.println("Simboli mostro rimasti: " + mostro.getTracciatoSimboli());
-            System.out.println("Premi INVIO per lanciare il dado del personaggio...");
-            scanner.nextLine();
+            // Menu di scelta turno: consente di usare oggetti prima del lancio
+            boolean turnoPronto = false;
+            while (!turnoPronto) {
+                System.out.println("\n[1] Usa un oggetto dall'inventario");
+                System.out.println("[INVIO] Lancia il dado");
+                System.out.print("> ");
+                String scelta = scanner.nextLine().trim();
+
+                if (scelta.equals("1")) {
+                    gestisciUsoOggettoInCombattimento(personaggio, mostro);
+                } else if (scelta.isEmpty()) {
+                    turnoPronto = true; // Procede al lancio del dado
+                } else {
+                    System.out.println("Opzione non valida.");
+                }
+            }
 
             // 3. Lancia il dado del personaggio e recupera la faccia
             FacciaDado facciaOttenuta = personaggio.lanciaDado();
@@ -83,6 +98,33 @@ public class GestoreCombattimento {
         // 6. Esito dello scontro
         if (personaggio.eVivo()) {
             System.out.println("\n*** VITTORIA! Hai sconfitto il mostro! ***");
+        }
+    }
+
+    private void gestisciUsoOggettoInCombattimento(Personaggio personaggio, CartaMostro mostro) {
+        List<Oggetto> oggetti = personaggio.getInventario().getOggetti();
+        if (oggetti.isEmpty()) {
+            System.out.println("Non hai oggetti nell'inventario!");
+            return;
+        }
+
+        System.out.println("\n--- OGGETTI DISPONIBILI ---");
+        for (int i = 0; i < oggetti.size(); i++) {
+            Oggetto obj = oggetti.get(i);
+            System.out.println("[" + (i + 1) + "] " + obj.getNome() + " - " + obj.getDescrizione());
+        }
+        System.out.println("[0] Annulla");
+        System.out.print("Scegli un oggetto da usare: ");
+
+        String input = scanner.nextLine().trim();
+        try {
+            int idx = Integer.parseInt(input) - 1;
+            if (idx >= 0 && idx < oggetti.size()) {
+                Oggetto daUsare = oggetti.get(idx);
+                daUsare.usa(personaggio, mostro);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Input non valido.");
         }
     }
 }

@@ -16,7 +16,7 @@ public class Main {
         System.out.println("        FUGA DAL CASSERO - SELEZIONE     ");
         System.out.println("=========================================");
 
-        // 1. Inizializzazione personaggi tramite la tua PersonaggioFactory
+        // 1. Inizializzazione personaggi tramite la PersonaggioFactory
         List<Personaggio> personaggiDisponibili = List.of(
                 PersonaggioFactory.creaCook(),
                 PersonaggioFactory.creaAbbot(),
@@ -34,13 +34,20 @@ public class Main {
                     " | AST: " + p.getAstuzia() + " | SAG: " + p.getSaggezza() + "]");
         }
 
-        System.out.print("\nScegli il tuo personaggio (1-6): ");
-        int scelta = scanner.nextInt() - 1;
-
-        // Validazione input
+        // --- GESTIONE INPUT PULITA (Senza residui di tasto INVIO) ---
+        int scelta = -1;
         while (scelta < 0 || scelta >= personaggiDisponibili.size()) {
-            System.out.print("Scelta non valida! Inserisci un numero da 1 a " + personaggiDisponibili.size() + ": ");
-            scelta = scanner.nextInt() - 1;
+            System.out.print("\nScegli il tuo personaggio (1-6): ");
+            String input = scanner.nextLine().trim();
+
+            try {
+                scelta = Integer.parseInt(input) - 1;
+                if (scelta < 0 || scelta >= personaggiDisponibili.size()) {
+                    System.out.println("Scelta non valida! Inserisci un numero compreso tra 1 e " + personaggiDisponibili.size() + ".");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Input non valido! Per favore inserisci un numero.");
+            }
         }
 
         Personaggio giocatoreScelto = personaggiDisponibili.get(scelta);
