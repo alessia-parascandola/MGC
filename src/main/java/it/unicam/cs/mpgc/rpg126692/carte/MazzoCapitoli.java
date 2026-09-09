@@ -13,6 +13,9 @@ public class MazzoCapitoli {
     private CartaIntro cartaIntro;
 
     public MazzoCapitoli(){
+        // Carta Intro
+        this.cartaIntro = (new CartaIntro());
+
         // Carte Mostro
         carteCapitolo.add(new CartaMostro("Mentre passi, una pesante porta di legno \n" +
                 "si apre violentemente e un pazzo vestito di stracci si lancia fuori. Impugna le sue catene \n" +
