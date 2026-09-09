@@ -29,4 +29,14 @@ public class FacciaDado {
     public boolean haScudo(){
         return scudo;
     }
+
+    // Restituisce il simbolo primario presente sulla faccia
+    public Simbolo getSimboloPrincipale() {
+        return simboli.get(0);
+    }
+
+    // Un lancio è un doppio se la lista contiene 2 simboli
+    public boolean isDoppio() {
+        return simboli.size() == 2;
+    }
 }

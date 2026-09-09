@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg126692.carte;
 
 import it.unicam.cs.mpgc.rpg126692.carte.Boss.*;
+import it.unicam.cs.mpgc.rpg126692.carte.Eventi.*;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 
 import java.util.ArrayList;
@@ -84,14 +85,31 @@ public class MazzoCapitoli {
                 "ti coglie sul fatto e giura di usarti come ripieno dei suoi prossimi tortini.", List.of(Simbolo.FORZA, Simbolo.SAGGEZZA), 2));
 
         // Carte Evento
-        carteCapitolo.add(new CartaEvento());
-        carteCapitolo.add(new CartaEvento());
-        carteCapitolo.add(new CartaEvento());
-        carteCapitolo.add(new CartaEvento());
-        carteCapitolo.add(new CartaEvento());
-        carteCapitolo.add(new CartaEvento());
-        carteCapitolo.add(new CartaEvento());
-        carteCapitolo.add(new CartaEvento());
+        carteCapitolo.add(new EventoRicompensaDiretta("Dall'oscurità di fronte a te, una freccia sibila vicino al tuo orecchio. \n" +
+                "Prima che tu possa reagire, un'altra penetra la tua spalla, facendoti accasciare agonizzante contro il muro. \n" +
+                "Perdi 2 HP.\n" +
+                "Strisciando cautamente lungo il passaggio, ti imbatti nel corpo di un uomo crivellato di frecce. \n" +
+                "Non vi è alcun segno di aggressori, quindi decidi di controllare se stesse trasportando qualcosa di valore. \n" +
+                "Pesca una carta Oggetto.", 1, 2));
+        carteCapitolo.add(new EventoRicompensaDiretta("Per entrare da questa porta sei obbligato a spostare degli spessi rampicanti spinosi. \n" +
+                "Essi prendono improvvisamente vita, avviluppando i tuoi polsi e trascinandoti dentro al roveto. \n" +
+                "Perdi 1 HP.\n" +
+                "Nel fare a pezzi le piante aggressive, queste alla fine retrocedono nelle crepe dei vecchi muri di pietra, \n" +
+                "portando alla luce gli averi di precedenti vittime. \n" +
+                "Pesca due carte Oggetto.", 2, 1));
+        carteCapitolo.add(new EventoRicompensaDiretta("Passi attraverso una scala che serve da cloaca sotto le latrine del castello. \n" +
+                "Mentre scegli attentamente il tuo percorso attraverso il sudiciume, qualcosa di strano cattura la tua attenzione. \n" +
+                "Pesca una carta Oggetto.", 1, 0));
+        carteCapitolo.add(new EventoRicompensaDiretta("Ti imbatti in una stanza che alcune guardie hanno lasciato di recente. \n" +
+                "Infatti, il fuoco ancora arde sotto la grata e una marmitta di brodo fumante borbotta sulla stufa. \n" +
+                "Improvvisamente odi l'avvicinarsi di passi e voci iraconde. Afferri ciò che puoi prima di \n" +
+                "sgattaiolare via nell'oscurità. \n" +
+                "Pesca una carta Oggetto.", 1, 0));
+        carteCapitolo.add(new EventoLameOscillanti());
+        carteCapitolo.add(new EventoStormoDiPipistrelli());
+        carteCapitolo.add(new EventoStanzaDelTorturatore());
+        carteCapitolo.add(new EventoTorreCampanaria());
+
 
         // Carte Boss
         carteCapitolo.add(new TerroreDelSottosuolo());

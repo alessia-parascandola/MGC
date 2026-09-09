@@ -74,4 +74,8 @@ public class MazzoOggetti {
         System.out.println("Gli oggetti sono finiti!");
         return null;
     }
+
+    public boolean isVuoto() {
+        return carte.isEmpty();
+    }
 }
