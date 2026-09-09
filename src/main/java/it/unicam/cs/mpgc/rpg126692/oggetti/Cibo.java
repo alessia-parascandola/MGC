@@ -21,7 +21,7 @@ public class Cibo extends Oggetto{
 
         // 2. Appliciamo la cura
         utilizzatore.cura(this.puntiCura);
-        System.out.println("Hai consumato " + getNome() + "! HP attuali: " + puntiCura + "/18 ");
+        System.out.println("Hai consumato " + getNome() + "! HP attuali: " + utilizzatore.getHP() + "/18 ");
 
         // 3. Troviamo la posizione di QUESTO cibo nell'inventario e lo scartiamo
         int indice = utilizzatore.getInventario().getOggetti().indexOf(this);

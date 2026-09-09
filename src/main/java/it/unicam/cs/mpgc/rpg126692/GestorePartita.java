@@ -102,10 +102,45 @@ public class GestorePartita {
     }
 
     private void assegnaRicompensaOggetto() {
-        if (!mazzoOggetti.isVuoto()) {
-            Oggetto nuovoOggetto = mazzoOggetti.pesca();
-            System.out.println("\n[RICOMPENSA] Hai ottenuto: " + nuovoOggetto.getNome() + "!");
+        if (mazzoOggetti.isVuoto()) return;
+
+        System.out.println("\n[Premi INVIO per pescare la tua ricompensa...]");
+        scanner.nextLine();
+
+        Oggetto nuovoOggetto = mazzoOggetti.pesca();
+        System.out.println("\n[RICOMPENSA] Hai trovato: " + nuovoOggetto.getNome() + " - " + nuovoOggetto.getDescrizione());
+
+        List<Oggetto> inventario = giocatore.getInventario().getOggetti();
+
+        // Se l'inventario ha già 2 oggetti, mostriamo il menu dedicato
+        if (inventario.size() >= 2) {
+            System.out.println("\nIl tuo inventario è pieno! Scegli quale oggetto tenere:");
+            System.out.println("[1] Tieni " + inventario.get(0).getNome() + " (Mano Destra)");
+            System.out.println("[2] Tieni " + inventario.get(1).getNome() + " (Mano Sinistra)");
+            System.out.println("[3] Prendi " + nuovoOggetto.getNome() + " (Scarta uno dei vecchi)");
+            System.out.print("> ");
+
+            String scelta = scanner.nextLine().trim();
+
+            if (scelta.equals("3")) {
+                System.out.println("\nQuale vuoi sostituire?");
+                System.out.println("[1] Sostituisci " + inventario.get(0).getNome());
+                System.out.println("[2] Sostituisci " + inventario.get(1).getNome());
+                System.out.print("> ");
+
+                String subScelta = scanner.nextLine().trim();
+                int idxScartare = subScelta.equals("2") ? 1 : 0;
+
+                Oggetto scartato = inventario.get(idxScartare);
+                giocatore.getInventario().scarta(idxScartare);
+                giocatore.getInventario().aggiungi(nuovoOggetto);
+                System.out.println("Hai scartato " + scartato.getNome() + " e equipaggiato " + nuovoOggetto.getNome() + "!");
+            } else {
+                System.out.println("Hai lasciato a terra: " + nuovoOggetto.getNome());
+            }
+        } else {
             giocatore.getInventario().aggiungi(nuovoOggetto);
+            System.out.println("Oggetto aggiunto al tuo inventario!");
         }
     }
 
