@@ -49,11 +49,17 @@ public class Personaggio {
     public void subisciDanno(int danno, boolean usaEvasione, boolean paratoDaDado) {
         if (danno <= 0) return;
 
-        // 1. Controlla se il giocatore ha la Pozione Evasione
-        Oggetto pozioneEvasione = cercaOggettoPerNome("Evasione effervescente");
+        // 1. Controlla se il giocatore ha la Pozione Evasione tramite tipo (per sicurezza)
+        Oggetto pozioneTrovata = null;
+        for (Oggetto obj : inventario.getOggetti()){
+            if (obj instanceof it.unicam.cs.mpgc.rpg126692.oggetti.pozioni.PozioneEvasione){
+                pozioneTrovata = obj;
+                break;
+            }
+        }
 
         // Se ha la pozione (e non è un danno già parato dal dado), gli chiediamo se vuole usarla
-        if (pozioneEvasione != null && !paratoDaDado) {
+        if (pozioneTrovata != null && !paratoDaDado) {
             Scanner scan = new Scanner(System.in);
             System.out.println("\n=========================================");
             System.out.println(" ATTENZIONE: Stai per subire " + danno + " danni!");
@@ -64,7 +70,7 @@ public class Personaggio {
             String scelta = scan.nextLine().trim();
 
             if (scelta.equals("1")) {
-                pozioneEvasione.usa(this, null); // Messaggio + scarto dall'inventario
+                pozioneTrovata.usa(this, null); // Messaggio + scarto dall'inventario
                 System.out.println("I tuoi HP rimangono invariati: " + this.hp + "/18");
                 System.out.println("=========================================");
                 return; // Esce subito senza applicare danno o usare lo scudo

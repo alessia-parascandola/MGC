@@ -18,7 +18,7 @@ public class FacciaDado {
             throw new IllegalArgumentException("Lo scudo deve essere presente su una faccia doppia figura!");
         }
 
-        this.simboli = simboli;
+        this.simboli = new java.util.ArrayList<>(simboli);
         this.scudo = scudo;
     }
 
