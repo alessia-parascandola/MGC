@@ -41,11 +41,13 @@ public class GestorePartita {
             if (numeroStanza == 0) {
                 System.out.println("---> INTRODUZIONE <---");
 
-                // La carta si occupa già di stampare il testo e attendere l'INVIO dell'utente
                 carta.esegui(giocatore, mazzoOggetti);
 
+                System.out.println("\n[Premi INVIO per entrare nel Cassero...]");
+                scanner.nextLine();
+
                 numeroStanza++;
-                continue; // Passa subito alla Stanza 1 senza mostrare il menu interazione
+                continue; // Passa subito alla Stanza 1
             }
 
             // CASO 2: Stanze Normali e Boss (Mostra la Dashboard completa)
