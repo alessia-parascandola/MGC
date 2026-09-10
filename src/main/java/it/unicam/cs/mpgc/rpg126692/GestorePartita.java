@@ -121,16 +121,21 @@ public class GestorePartita {
         Oggetto nuovoOggetto = mazzoOggetti.pesca();
         System.out.println("\n[RICOMPENSA] Hai trovato: " + nuovoOggetto.getNome() + " - " + nuovoOggetto.getDescrizione());
 
+        gestisciAcquisizioneOggetto(giocatore, nuovoOggetto);
+    }
+
+    // Metodo helper statico riutilizzabile da qualsiasi carta evento o dinamica di gioco
+    public static void gestisciAcquisizioneOggetto(Personaggio giocatore, Oggetto nuovoOggetto) {
+        Scanner localScanner = new Scanner(System.in);
         List<Oggetto> inventario = giocatore.getInventario().getOggetti();
 
-        // Se l'inventario ha già 2 oggetti, mostriamo le 2 opzioni compattate
         if (inventario.size() >= 2) {
             System.out.println("\nIl tuo inventario è pieno! Scegli un'azione:");
             System.out.println("[1] Mantieni i tuoi oggetti attuali (" + inventario.get(0).getNome() + ", " + inventario.get(1).getNome() + ") e lascia " + nuovoOggetto.getNome());
             System.out.println("[2] Prendi " + nuovoOggetto.getNome() + " e scarta uno dei vecchi");
             System.out.print("> ");
 
-            String scelta = scanner.nextLine().trim();
+            String scelta = localScanner.nextLine().trim();
 
             if (scelta.equals("2")) {
                 // Sottomenu: Scegli quale dei due vecchi oggetti sostituire
@@ -139,7 +144,7 @@ public class GestorePartita {
                 System.out.println("[2] Sostituisci " + inventario.get(1).getNome() + " (Mano Sinistra)");
                 System.out.print("> ");
 
-                String subScelta = scanner.nextLine().trim();
+                String subScelta = localScanner.nextLine().trim();
                 int idxScartare = subScelta.equals("2") ? 1 : 0;
 
                 Oggetto scartato = inventario.get(idxScartare);
