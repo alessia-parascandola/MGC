@@ -11,8 +11,8 @@ public class Inventario {
     public int getManiOccupate(){
         int maniUsate = 0;
         for (Oggetto obj : oggetti){
-            if (obj instanceof Arma){
-                maniUsate += ((Arma) obj).getManiRichieste();
+            if (obj instanceof Arma arma){
+                maniUsate += arma.getManiRichieste();
             }
             else {
                 // Gli altri oggetti (cibo, pozioni) occupano 1 mano finchè li trasporti
@@ -29,10 +29,7 @@ public class Inventario {
 
     // Controlla se un nuovo oggetto può essere impugnato senza superare le 2 mani
     public boolean puoContenere(Oggetto nuovoOggetto){
-        int maniRichieste = 1;
-        if (nuovoOggetto instanceof Arma){
-            maniRichieste = ((Arma) nuovoOggetto).getManiRichieste();
-        }
+        int maniRichieste = (nuovoOggetto instanceof Arma arma) ? arma.getManiRichieste() : 1;
         return (getManiOccupate() + maniRichieste) <= MAX_MANI;
     }
 
@@ -74,8 +71,8 @@ public class Inventario {
     public int getRiduzioneDannoTotale() {
         int riduzione = 0;
         for (Oggetto obj : oggetti) {
-            if (obj instanceof Scudo) {
-                riduzione += ((Scudo) obj).getRiduzioneDanno();
+            if (obj instanceof Scudo scudo) {
+                riduzione += scudo.getRiduzioneDanno();
             }
         }
         return riduzione;

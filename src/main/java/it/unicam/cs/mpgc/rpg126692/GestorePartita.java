@@ -3,6 +3,9 @@ package it.unicam.cs.mpgc.rpg126692;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaCapitolo;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.carte.Boss.CartaBoss;
+import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
+import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
+import it.unicam.cs.mpgc.rpg126692.oggetti.Arma;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
@@ -217,5 +220,33 @@ public class GestorePartita {
         System.out.println("               GAME OVER                 ");
         System.out.println("  Sei caduto tra le ombre del Cassero... ");
         System.out.println("=========================================");
+    }
+
+    // Gestisce il tiro del dado verificando se l'arma equipaggiata permette il rilancio sul simbolo uscito
+    public static FacciaDado gestisciLancioConArma(Personaggio giocatore) {
+        Scanner scan = new Scanner(System.in);
+        FacciaDado esito = giocatore.lanciaDado();
+
+        for (Oggetto obj : giocatore.getInventario().getOggetti()) {
+            if (obj instanceof Arma arma) {
+                Simbolo simboloTarget = arma.getSimboloRilancio();
+
+                // Se l'esito corrisponde al simbolo di rilancio dell'arma equipaggiata
+                if (simboloTarget != null && esito.getSimboloPrincipale() == simboloTarget) {
+                    System.out.println("\n[ABILITÀ ARMA: " + arma.getNome() + "]");
+                    System.out.println("È uscito il simbolo " + simboloTarget + "!");
+                    System.out.println("Vuoi usare l'effetto di " + arma.getNome() + " per lanciare di nuovo il dado? [1 = Si / 2 = No]");
+                    System.out.print("> ");
+
+                    String risposta = scan.nextLine().trim();
+                    if (risposta.equals("1")) {
+                        System.out.println("Rilanci il dado grazie a " + arma.getNome() + "...");
+                        return giocatore.lanciaDado();
+                    }
+                }
+            }
+        }
+
+        return esito;
     }
 }
