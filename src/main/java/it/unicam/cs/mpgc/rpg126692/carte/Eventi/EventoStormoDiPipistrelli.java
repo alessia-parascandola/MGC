@@ -13,12 +13,13 @@ public class EventoStormoDiPipistrelli extends CartaEvento{
 
     public EventoStormoDiPipistrelli() {
         super("All'improvviso, uno stormo di pipistrelli giganti irrompe nel corridoio. \n" +
-                "Puoi solo cercare di ripararti dal soverchiante turbinare di ali e zanne.");
+                "Puoi solo cercare di ripararti dal soverchiante turbinare di ali e zanne.\n" +
+                "Difenditi: tira il DadoPersonaggio insieme a tre DadiCapitolo, per ogni simbolo\n" +
+                "corrispondente perdi 1HP, ma se ti esce un DOPPIO non vieni ferito!");
     }
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
-        System.out.println("\n--- EVENTO: STORMO DI PIPISTRELLI ---");
         System.out.println(getDescrizione());
 
         Scanner scanner = new Scanner(System.in);

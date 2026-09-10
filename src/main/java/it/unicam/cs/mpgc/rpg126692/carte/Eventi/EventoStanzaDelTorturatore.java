@@ -18,7 +18,6 @@ public class EventoStanzaDelTorturatore extends CartaEvento{
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
-        System.out.println("\n--- EVENTO: STANZA DEL TORTURATORE ---");
         System.out.println(getDescrizione());
 
         Scanner scanner = new Scanner(System.in);
