@@ -4,6 +4,7 @@ import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 import java.util.List;
+import java.util.Scanner;
 
 public class CavernaAllagata extends CartaEvento{
 
@@ -17,39 +18,36 @@ public class CavernaAllagata extends CartaEvento{
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
+        System.out.println("\n--- EVENTO: CAVERNA ALLAGATA ---");
         System.out.println(getDescrizione());
-    }
 
-    // Risolve la prova a tentativi progressivi per ciascun personaggio
-    public void eseguiProvaMoltitudine(List<Personaggio> gruppo) {
-        for (Personaggio p : gruppo) {
-            System.out.println("\n--- Tuffo di " + p.getNome() + " ---");
-            boolean superato = false;
+        Scanner scanner = new Scanner(System.in);
+        boolean superato = false;
 
-            // Il personaggio ha fino a un massimo di 3 tentativi per ottenere un doppio
-            for (int tentativo = 1; tentativo <= 3; tentativo++) {
-                FacciaDado faccia = p.lanciaDado();
-                System.out.println("Tentativo " + tentativo + ": " + faccia.getSimboloPrincipale() + (faccia.isDoppio() ? " (DOPPIO)" : ""));
+        for (int tentativo = 1; tentativo <= 3; tentativo++) {
+            if (personaggio.isSconfitto()) break;
 
-                // Se la faccia del dado tirata ha due simboli (isDoppio == true), la prova è superata
-                if (faccia.isDoppio()) {
-                    System.out.println("SUCCESSO: Riemergi dall'altra parte!");
-                    superato = true;
-                    break; // Interrompe i tentativi rimanenti per questo personaggio
-                } else {
-                    // Ad ogni fallimento perdi 1 HP prima di poter ritentare
-                    System.out.println("Inizi ad annegare! Perdi 1 HP.");
-                    p.subisciDanno(1, false, false);
+            System.out.println("\n[Tentativo " + tentativo + "/3 - Premi INVIO per lanciare il dado e cercare un DOPPIO...]");
+            scanner.nextLine();
 
-                    // Se gli HP scendono a 0, interrompe i tentativi per evitare lanci da morto
-                    if (p.isSconfitto()) break;
-                }
+            FacciaDado faccia = personaggio.lanciaDado();
+            boolean eDoppio = faccia.isDoppio();
+
+            System.out.println("Esito lancio: " + faccia.getSimboloPrincipale() + (eDoppio ? " (DOPPIO!)" : ""));
+
+            if (eDoppio) {
+                System.out.println("SUCCESSO: Riesci a trovare un varco e riemergi dall'altra parte!");
+                superato = true;
+                break;
+            } else {
+                System.out.println("Inizi ad annegare! Perdi 1 HP.");
+                personaggio.subisciDanno(1, false, false);
+                System.out.println("HP Attuali: [" + personaggio.getHP() + "/18]");
             }
+        }
 
-            // Se dopo 3 tentativi non ha mai fatto un doppio ma è ancora vivo, riesce comunque a passare esausto
-            if (!superato && !p.isSconfitto()) {
-                System.out.println("Dopo 3 tentativi, riesci a passare esausto e senza fiato.");
-            }
+        if (!superato && !personaggio.isSconfitto()) {
+            System.out.println("\nDopo 3 tentativi falliti, riesci trascinandoti a riemergere esausto e senza fiato.");
         }
     }
 }
