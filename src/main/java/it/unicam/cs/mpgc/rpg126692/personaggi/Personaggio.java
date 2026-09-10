@@ -68,7 +68,13 @@ public class Personaggio {
         int dannoEffettivo = Math.max(0, danno - riduzione);
 
         if (riduzione > 0) {
-            System.out.println("Lo Scudo Marcito riduce il danno di " + riduzione + "!");
+            if (danno > 1) {
+                // Riduce il danno di 1, ma garantisce che il danno non scenda sotto 1
+                dannoEffettivo = Math.max(1, danno - riduzione);
+                System.out.println("Lo Scudo Marcito riduce il danno di " + riduzione + "!");
+            } else {
+                System.out.println("Lo Scudo Marcito non può azzerare un danno singolo! Subisci 1 HP.");
+            }
         }
 
         this.hp = Math.max(0, this.hp - dannoEffettivo);
