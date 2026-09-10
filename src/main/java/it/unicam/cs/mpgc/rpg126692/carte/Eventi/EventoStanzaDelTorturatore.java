@@ -1,10 +1,11 @@
 package it.unicam.cs.mpgc.rpg126692.carte.Eventi;
 
-import it.unicam.cs.mpgc.rpg126692.dadi.DadoCapitolo;
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
+
+import java.util.Scanner;
 
 public class EventoStanzaDelTorturatore extends CartaEvento{
 
@@ -17,24 +18,28 @@ public class EventoStanzaDelTorturatore extends CartaEvento{
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
+        System.out.println("\n--- EVENTO: STANZA DEL TORTURATORE ---");
         System.out.println(getDescrizione());
-    }
 
-    @Override
-    public void eseguiProvaDado(Personaggio personaggioCheHaGirato, DadoCapitolo dadoCapitolo) {
-        System.out.println("\n" + personaggioCheHaGirato.getNome() + " tenta di resistere alla tortura!");
+        Scanner scanner = new Scanner(System.in);
 
         for (int i = 1; i <= 5; i++) {
-            FacciaDado faccia = personaggioCheHaGirato.lanciaDado();
+            if (personaggio.isSconfitto()) break;
+
+            System.out.println("\n[Premi INVIO per il lancio " + i + "/5 (FORZA o DOPPIO)...]");
+            scanner.nextLine();
+
+            FacciaDado faccia = personaggio.lanciaDado();
             Simbolo tiro = faccia.getSimboloPrincipale();
             boolean eDoppio = faccia.isDoppio();
 
             System.out.print("Tiro " + i + "/5: " + tiro + (eDoppio ? " (DOPPIO)" : "") + " -> ");
             if (tiro == Simbolo.FORZA || eDoppio) {
-                System.out.println("Resisti!");
+                System.out.println("Resisti al dolore!");
             } else {
-                System.out.println("Fallito! Perdi 1 HP.");
-                personaggioCheHaGirato.subisciDanno(1, false, false);
+                System.out.println("Fallito! Subisci 1 HP di danno.");
+                personaggio.subisciDanno(1, false, false);
+                System.out.println("HP Attuali: [" + personaggio.getHP() + "/18]");
             }
         }
     }
