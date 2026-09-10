@@ -8,6 +8,7 @@ import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 import java.util.Scanner;
 
 public class Personaggio {
+    private static final int saluteMassimaDefault = 35;
     private int hp;
     private final String nome;
     private final int forza;
@@ -17,8 +18,8 @@ public class Personaggio {
     private Inventario inventario;
 
     public Personaggio(int hp, String nome, int forza, int astuzia, int saggezza, DadoPersonaggio dado){
-        if(hp <= 0 || hp > 18){
-            throw new IllegalArgumentException("Gli HP iniziali devono essere compresi tra 1 e 18!");
+        if(hp <= 0 || hp > saluteMassimaDefault){
+            throw new IllegalArgumentException("Gli HP iniziali devono essere compresi tra 1 e 35!");
         }
         if(nome == null || nome.isBlank()){
             throw new IllegalArgumentException("Il nome del personaggio non può essere vuoto!");
@@ -71,7 +72,7 @@ public class Personaggio {
 
             if (scelta.equals("1")) {
                 pozioneTrovata.usa(this, null); // Messaggio + scarto dall'inventario
-                System.out.println("I tuoi HP rimangono invariati: " + this.hp + "/18");
+                System.out.println("I tuoi HP rimangono invariati: " + this.hp + "/" + getSaluteMassima());
                 System.out.println("=========================================");
                 return; // Esce subito senza applicare danno o usare lo scudo
             }
@@ -102,7 +103,7 @@ public class Personaggio {
     }
 
     public void cura(int quantita){
-        hp = Math.min(18, hp + quantita);
+        hp = Math.min(getSaluteMassima(), hp + quantita);
     }
     public boolean isSconfitto(){
         return hp <= 0;
@@ -131,6 +132,6 @@ public class Personaggio {
     }
 
     public int getSaluteMassima(){
-        return 18;
+        return saluteMassimaDefault;
     }
 }

@@ -19,7 +19,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.SAGGEZZA), false)
         ));
 
-        return new Personaggio(18, "Cook", 4, 3, 1, dadoCook);
+        return new Personaggio(35, "Cook", 4, 3, 1, dadoCook);
     }
 
     public static Personaggio creaAbbot(){
@@ -32,7 +32,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false)
         ));
 
-        return new Personaggio(18, "Abbot", 3, 1, 4, dadoAbbot);
+        return new Personaggio(35, "Abbot", 3, 1, 4, dadoAbbot);
     }
 
     public static Personaggio creaTailor(){
@@ -45,7 +45,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.FORZA), false)
         ));
 
-        return new Personaggio(18, "Tailor", 1, 4, 3, dadoTailor);
+        return new Personaggio(35, "Tailor", 1, 4, 3, dadoTailor);
     }
 
     public static Personaggio creaMiller(){
@@ -58,7 +58,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.SAGGEZZA), false)
         ));
 
-        return new Personaggio(18, "Miller", 3, 4, 1, dadoMiller);
+        return new Personaggio(35, "Miller", 3, 4, 1, dadoMiller);
     }
 
     public static Personaggio creaTanner(){
@@ -71,7 +71,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.FORZA), false)
         ));
 
-        return new Personaggio(18, "Tanner", 1, 3, 4, dadoTanner);
+        return new Personaggio(35, "Tanner", 1, 3, 4, dadoTanner);
     }
 
     public static Personaggio creaSmith(){
@@ -84,6 +84,6 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false)
         ));
 
-        return new Personaggio(18, "Smith", 4, 1, 3, dadoSmith);
+        return new Personaggio(35, "Smith", 4, 1, 3, dadoSmith);
     }
 }
