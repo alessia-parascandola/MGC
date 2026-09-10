@@ -13,13 +13,17 @@ public class PozioneSimbolo extends Pozione {
     }
 
     @Override
-    public void usa(Personaggio utilizzatore, CartaMostro mostro){
-        if (mostro != null && mostro.haSimbolo(simboloOttenuto)) {
-            mostro.rimuoviSimbolo(simboloOttenuto);
-            System.out.println("Usi " + getNome() + "! Ottieni un risultato " + simboloOttenuto + " e rimuovi un dado al mostro!");
-            super.usa(utilizzatore, mostro);
+    public void usa(Personaggio utilizzatore, CartaMostro mostro) {
+        if (mostro != null && !mostro.getTracciatoSimboli().isEmpty()) {
+            if (mostro.getTracciatoSimboli().contains(simboloOttenuto)) {
+                mostro.getTracciatoSimboli().remove(simboloOttenuto);
+                System.out.println("Usi " + getNome() + "! Ottieni 1 " + simboloOttenuto + " e completi un simbolo del mostro!");
+                super.usa(utilizzatore, mostro); // La scarta
+            } else {
+                System.out.println("Il mostro non ha il simbolo " + simboloOttenuto + " nel suo tracciato!");
+            }
         } else {
-            System.out.println("Non puoi usare questa pozione ora: il mostro non ha il simbolo " + simboloOttenuto + "!");
+            System.out.println("Puoi usare questa pozione solo durante un combattimento o una prova!");
         }
     }
 }

@@ -20,6 +20,4 @@ public abstract class Pozione extends Oggetto {
             utilizzatore.getInventario().scarta(indice);
         }
     }
-
-
 }

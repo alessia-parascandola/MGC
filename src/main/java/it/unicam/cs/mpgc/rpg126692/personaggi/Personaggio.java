@@ -5,6 +5,8 @@ import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Inventario;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 
+import java.util.Scanner;
+
 public class Personaggio {
     private int hp;
     private final String nome;
@@ -47,13 +49,25 @@ public class Personaggio {
     public void subisciDanno(int danno, boolean usaEvasione, boolean paratoDaDado) {
         if (danno <= 0) return;
 
-        // 1. Se il giocatore ha scelto di usare la pozione
-        if (usaEvasione) {
-            Oggetto pozioneEvasione = cercaOggettoPerNome("Evasione effervescente");
-            if (pozioneEvasione != null) {
-                System.out.println("Usi Evasione effervescente! Danno annullato.");
-                pozioneEvasione.usa(this, null); // Annulla il danno e la scarta
-                return;
+        // 1. Controlla se il giocatore ha la Pozione Evasione
+        Oggetto pozioneEvasione = cercaOggettoPerNome("Evasione effervescente");
+
+        // Se ha la pozione (e non è un danno già parato dal dado), gli chiediamo se vuole usarla
+        if (pozioneEvasione != null && !paratoDaDado) {
+            Scanner scan = new Scanner(System.in);
+            System.out.println("\n=========================================");
+            System.out.println(" ATTENZIONE: Stai per subire " + danno + " danni!");
+            System.out.println(" Hai nell'inventario: Evasione effervescente");
+            System.out.println(" Vuoi usarla per ANNULLARE COMPLETAMENTE il danno? [1 = Sì / 2 = No]");
+            System.out.print("> ");
+
+            String scelta = scan.nextLine().trim();
+
+            if (scelta.equals("1")) {
+                pozioneEvasione.usa(this, null); // Messaggio + scarto dall'inventario
+                System.out.println("I tuoi HP rimangono invariati: " + this.hp + "/18");
+                System.out.println("=========================================");
+                return; // Esce subito senza applicare danno o usare lo scudo
             }
         }
 

@@ -8,6 +8,7 @@ import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Arma;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
+import it.unicam.cs.mpgc.rpg126692.oggetti.pozioni.PozioneFortuna;
 import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.FrammentoDellaFuria;
 import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.RunaDiRengorn;
 import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.VersettiCurativi;
@@ -145,12 +146,20 @@ public class GestorePartita {
     // Metodo helper statico riutilizzabile da qualsiasi carta evento o dinamica di gioco
     public static void gestisciAcquisizioneOggetto(Personaggio giocatore, Oggetto nuovoOggetto) {
         Scanner localScanner = new Scanner(System.in);
-        List<Oggetto> inventario = giocatore.getInventario().getOggetti();
 
-        if (inventario.size() >= 2) {
-            System.out.println("\nNon hai abbastanza mani libere:");
-            System.out.println("[1] Mantieni i tuoi oggetti attuali (" + inventario.get(0).getNome() + ", " + inventario.get(1).getNome() + ") e lascia " + nuovoOggetto.getNome());
-            System.out.println("[2] Prendi " + nuovoOggetto.getNome() + " e scarta uno dei vecchi");
+        // Ciclo finché l'inventario non è in grado di contenere l'oggetto o finché il giocatore non decide di lasciarlo
+        while (!giocatore.getInventario().puoContenere(nuovoOggetto)) {
+            List<Oggetto> inventario = giocatore.getInventario().getOggetti();
+
+            if (inventario.isEmpty()) {
+                System.out.println("Impossibile equipaggiare l'oggetto.");
+                break;
+            }
+
+            System.out.println("\nNon hai abbastanza mani libere per equipaggiare " + nuovoOggetto.getNome() + "!");
+            System.out.println("Scegli un'azione:");
+            System.out.println("[1] Lascia " + nuovoOggetto.getNome() + " a terra");
+            System.out.println("[2] Scarta un oggetto per liberare mani");
             System.out.print("> ");
 
             String scelta = localScanner.nextLine().trim();
@@ -158,7 +167,7 @@ public class GestorePartita {
             if (scelta.equals("2")) {
                 System.out.println("\nQuale oggetto vuoi scartare?");
                 for (int i = 0; i < inventario.size(); i++) {
-                    System.out.println("[" + (i + 1) + "] " + inventario.get(i).getNome());
+                    System.out.println("[" + (i + 1) + "] " + inventario.get(i).getNome() + " (" + inventario.get(i).getDescrizione() + ")");
                 }
                 System.out.print("> ");
 
@@ -166,24 +175,22 @@ public class GestorePartita {
                     int idxScartare = Integer.parseInt(localScanner.nextLine().trim()) - 1;
                     if (idxScartare >= 0 && idxScartare < inventario.size()) {
                         Oggetto scartato = giocatore.getInventario().scarta(idxScartare);
-
-                        // Riprova l'aggiunta dopo lo scarto
-                        if (!giocatore.getInventario().aggiungi(nuovoOggetto)) {
-                            System.out.println("Anche dopo lo scarto non hai abbastanza mani libere per " + nuovoOggetto.getNome() + "!");
-                        }
+                        System.out.println("Hai scartato: " + scartato.getNome());
                     } else {
-                        System.out.println("Scelta non valida! L'oggetto viene lasciato a terra.");
+                        System.out.println("Scelta non valida!");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Input non valido! L'oggetto viene lasciato a terra.");
+                    System.out.println("Input non valido!");
                 }
             } else {
                 System.out.println("Hai lasciato a terra " + nuovoOggetto.getNome() + ".");
+                return; // Esce senza equipaggiare
             }
-        } else {
-            giocatore.getInventario().aggiungi(nuovoOggetto);
-            // Qui viene aggiunto se hai spazio nell'inventario
         }
+
+        // Quando le mani/spazi sono finalmente sufficienti, aggiunge l'oggetto
+        giocatore.getInventario().aggiungi(nuovoOggetto);
+        System.out.println("Hai equipaggiato con successo: " + nuovoOggetto.getNome() + "!");
     }
 
     // Menù Esplorazione
@@ -319,6 +326,26 @@ public class GestorePartita {
         return esito;
     }
 
+    public static FacciaDado gestisciUsoFortunaLiquida(Personaggio giocatore, FacciaDado primoLancio, Scanner scan) {
+        List<Oggetto> oggetti = giocatore.getInventario().getOggetti();
+
+        for (int i = 0; i < oggetti.size(); i++) {
+            if (oggetti.get(i) instanceof PozioneFortuna pozione) {
+                System.out.println("\n[POZIONE DISPONIBILE] Hai " + pozione.getNome() + "!");
+                System.out.println("Risultato attuale: " + primoLancio.getSimboloPrincipale());
+                System.out.println("Vuoi usarla per scartare questo tiro e tirare di nuovo? [1 = Si / 2 = No]");
+                System.out.print("> ");
+
+                if (scan.nextLine().trim().equals("1")) {
+                    pozione.usa(giocatore, null); // Messaggio + scarto dall'inventario
+                    System.out.println("Lanci nuovamente il dado personaggio...");
+                    return giocatore.lanciaDado(); // Ritorna direttamente il NUOVO lancio!
+                }
+            }
+        }
+        return primoLancio; // Se non la usi o non ce l'hai, tiene il primo lancio
+    }
+
     // Metodo CENTRALIZZATO per tutti i lanci di dado del gioco
     public static FacciaDado eseguiLancioCompleto(Personaggio giocatore, Scanner scanner) {
         // 1. Lancia il dado e gestisce i reroll dell'Arma
@@ -327,6 +354,10 @@ public class GestorePartita {
         // 2. Controlla e attiva le Reliquie (Versetti, Runa, Furia)
         gestisciEffettiReliquie(giocatore, esito, scanner);
 
+        // 3. Controlla e attiva le Reliquie (Versetti, Runa, Furia)
+        gestisciEffettiReliquie(giocatore, esito, scanner);
+
         return esito;
     }
+
 }
