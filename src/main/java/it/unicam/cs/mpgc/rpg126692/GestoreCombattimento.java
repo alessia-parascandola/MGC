@@ -34,6 +34,7 @@ public class GestoreCombattimento {
         while (!mostro.eSconfitto() && personaggio.eVivo()) {
             System.out.println("\nHP Personaggio: " + personaggio.getHP() + "/" + personaggio.getSaluteMassima());
             System.out.println("Simboli mostro rimasti: " + mostro.getTracciatoSimboli());
+
             // Menu di scelta turno: consente di usare oggetti prima del lancio
             boolean turnoPronto = false;
             while (!turnoPronto) {
@@ -51,8 +52,8 @@ public class GestoreCombattimento {
                 }
             }
 
-            // 3. Lancia il dado del personaggio e recupera la faccia
-            FacciaDado facciaOttenuta = personaggio.lanciaDado();
+            // 3. Lancio completo: Chiamata a GestorePartita per attivare Armi, Reliquie e Pozione Fortuna
+            FacciaDado facciaOttenuta = GestorePartita.eseguiLancioCompleto(personaggio, scanner);
             List<Simbolo> simboliUsciti = facciaOttenuta.getSimboli();
             boolean haScudo = facciaOttenuta.haScudo();
 

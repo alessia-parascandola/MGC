@@ -253,6 +253,9 @@ public class GestorePartita {
     public static void gestisciEffettiReliquie(Personaggio giocatore, FacciaDado esito, Scanner scanner) {
         List<Oggetto> inventario = giocatore.getInventario().getOggetti();
 
+        // Controlla se la faccia uscitia ha almeno 2 simboli (un DOPPIO)
+        boolean eUnDoppio = esito.getSimboli().size() >= 2;
+
         for (Oggetto obj : inventario) {
 
             // 1. VERSETTI CURATIVI (Interattiva se si fa un DOPPIO)
@@ -277,8 +280,10 @@ public class GestorePartita {
                     String sc = scanner.nextLine().trim();
                     Simbolo scelto = sc.equals("1") ? Simbolo.FORZA : (sc.equals("2") ? Simbolo.ASTUZIA : Simbolo.SAGGEZZA);
 
-                    runa.trasformaDoppioInSingolo(scelto);
-                    // Aggiorna visivamente o logicamente il simbolo dell'esito
+                    // Sostituisce i simboli nell'esito corrente
+                    esito.getSimboli().clear();
+                    esito.getSimboli().add(scelto);
+                    System.out.println("Simbolo convertito in: " + scelto);
                 }
             }
 
@@ -292,7 +297,9 @@ public class GestorePartita {
                         furia.attivaEffetto();
                         FacciaDado secondoLancio = giocatore.lanciaDado();
                         System.out.println("Secondo lancio ottenuto: " + secondoLancio.getSimboloPrincipale());
-                        // Entrambi i risultati ora si sommano nella risoluzione del combattimento/prova
+
+                        // FUSIONE FONDAMENTALE: aggiunge i simboli del secondo tiro al tiro attuale!
+                        esito.getSimboli().addAll(secondoLancio.getSimboli());
                     }
                 }
             }
@@ -308,8 +315,8 @@ public class GestorePartita {
             if (obj instanceof Arma arma) {
                 Simbolo simboloTarget = arma.getSimboloRilancio();
 
-                // Se l'esito corrisponde al simbolo di rilancio dell'arma equipaggiata
-                if (simboloTarget != null && esito.getSimboloPrincipale() == simboloTarget) {
+                // Controlla se il simbolo dell'arma è contenuto nei simboli usciti sul dado!
+                if (simboloTarget != null && esito.getSimboli().contains(simboloTarget)) {
                     System.out.println("\n[ABILITÀ ARMA: " + arma.getNome() + "]");
                     System.out.println("È uscito il simbolo " + simboloTarget + "!");
                     System.out.println("Vuoi usare l'effetto di " + arma.getNome() + " per lanciare di nuovo il dado? [1 = Si / 2 = No]");
@@ -332,7 +339,7 @@ public class GestorePartita {
         for (int i = 0; i < oggetti.size(); i++) {
             if (oggetti.get(i) instanceof PozioneFortuna pozione) {
                 System.out.println("\n[POZIONE DISPONIBILE] Hai " + pozione.getNome() + "!");
-                System.out.println("Risultato attuale: " + primoLancio.getSimboloPrincipale());
+                System.out.println("Risultato attuale: " + primoLancio.getSimboli());
                 System.out.println("Vuoi usarla per scartare questo tiro e tirare di nuovo? [1 = Si / 2 = No]");
                 System.out.print("> ");
 
@@ -351,8 +358,8 @@ public class GestorePartita {
         // 1. Lancia il dado e gestisce i reroll dell'Arma
         FacciaDado esito = gestisciLancioConArma(giocatore);
 
-        // 2. Controlla e attiva le Reliquie (Versetti, Runa, Furia)
-        gestisciEffettiReliquie(giocatore, esito, scanner);
+        // 2. Controlla e attiva l'eventuale Pozione Fortuna Liquida
+        esito = gestisciUsoFortunaLiquida(giocatore, esito, scanner);
 
         // 3. Controlla e attiva le Reliquie (Versetti, Runa, Furia)
         gestisciEffettiReliquie(giocatore, esito, scanner);
