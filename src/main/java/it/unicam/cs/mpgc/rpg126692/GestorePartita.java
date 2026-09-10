@@ -8,6 +8,9 @@ import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Arma;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.FrammentoDellaFuria;
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.RunaDiRengorn;
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.VersettiCurativi;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 import java.util.List;
@@ -38,12 +41,14 @@ public class GestorePartita {
         while (cassero.haCarte()) {
             CartaCapitolo carta = cassero.pescaProssimaCarta();
 
+            // Reset effetti per turno (es. Frammento della Furia)
+            resetEffettiTurno();
+
             System.out.println("\n======================================================================\n");
 
             // CASO 1: Carta Intro (Stanza 0)
             if (numeroStanza == 0) {
                 System.out.println("---> INTRODUZIONE <---");
-
                 carta.esegui(giocatore, mazzoOggetti);
 
                 System.out.println("\n[Premi INVIO per entrare nel Cassero...]");
@@ -94,6 +99,14 @@ public class GestorePartita {
         System.out.println("*****************************************");
     }
 
+    private void resetEffettiTurno(){
+        for (Oggetto obj : giocatore.getInventario().getOggetti()){
+            if (obj instanceof FrammentoDellaFuria furia){
+                furia.resetTurno();
+            }
+        }
+    }
+
     private void mostraDashboard() {
         System.out.println("\n======================================================================");
         System.out.println(" PERSONAGGIO: " + giocatore.getNome() + " | HP: [" + giocatore.getHP() + "/18]");
@@ -135,7 +148,7 @@ public class GestorePartita {
         List<Oggetto> inventario = giocatore.getInventario().getOggetti();
 
         if (inventario.size() >= 2) {
-            System.out.println("\nIl tuo inventario è pieno! Scegli un'azione:");
+            System.out.println("\nNon hai abbastanza mani libere:");
             System.out.println("[1] Mantieni i tuoi oggetti attuali (" + inventario.get(0).getNome() + ", " + inventario.get(1).getNome() + ") e lascia " + nuovoOggetto.getNome());
             System.out.println("[2] Prendi " + nuovoOggetto.getNome() + " e scarta uno dei vecchi");
             System.out.print("> ");
@@ -143,21 +156,29 @@ public class GestorePartita {
             String scelta = localScanner.nextLine().trim();
 
             if (scelta.equals("2")) {
-                // Sottomenu: Scegli quale dei due vecchi oggetti sostituire
-                System.out.println("\nQuale oggetto vuoi sostituire?");
-                System.out.println("[1] Sostituisci " + inventario.get(0).getNome() + " (Mano Destra)");
-                System.out.println("[2] Sostituisci " + inventario.get(1).getNome() + " (Mano Sinistra)");
+                System.out.println("\nQuale oggetto vuoi scartare?");
+                for (int i = 0; i < inventario.size(); i++) {
+                    System.out.println("[" + (i + 1) + "] " + inventario.get(i).getNome());
+                }
                 System.out.print("> ");
 
-                String subScelta = localScanner.nextLine().trim();
-                int idxScartare = subScelta.equals("2") ? 1 : 0;
+                try {
+                    int idxScartare = Integer.parseInt(localScanner.nextLine().trim()) - 1;
+                    if (idxScartare >= 0 && idxScartare < inventario.size()) {
+                        Oggetto scartato = giocatore.getInventario().scarta(idxScartare);
 
-                Oggetto scartato = inventario.get(idxScartare);
-                giocatore.getInventario().scarta(idxScartare);
-                giocatore.getInventario().aggiungi(nuovoOggetto);
-                System.out.println("Hai scartato " + scartato.getNome() + " ed equipaggiato " + nuovoOggetto.getNome() + "!");
+                        // Riprova l'aggiunta dopo lo scarto
+                        if (!giocatore.getInventario().aggiungi(nuovoOggetto)) {
+                            System.out.println("Anche dopo lo scarto non hai abbastanza mani libere per " + nuovoOggetto.getNome() + "!");
+                        }
+                    } else {
+                        System.out.println("Scelta non valida! L'oggetto viene lasciato a terra.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Input non valido! L'oggetto viene lasciato a terra.");
+                }
             } else {
-                System.out.println("Hai lasciato a terra " + nuovoOggetto.getNome() + " e mantenuto i tuoi oggetti.");
+                System.out.println("Hai lasciato a terra " + nuovoOggetto.getNome() + ".");
             }
         } else {
             giocatore.getInventario().aggiungi(nuovoOggetto);
@@ -222,6 +243,55 @@ public class GestorePartita {
         System.out.println("=========================================");
     }
 
+    public static void gestisciEffettiReliquie(Personaggio giocatore, FacciaDado esito, Scanner scanner) {
+        List<Oggetto> inventario = giocatore.getInventario().getOggetti();
+
+        for (Oggetto obj : inventario) {
+
+            // 1. VERSETTI CURATIVI (Interattiva se si fa un DOPPIO)
+            if (obj instanceof VersettiCurativi versetti && esito.isDoppio()) {
+                System.out.println("\n[RELIQUIA: Versetti Curativi] Hai ottenuto un DOPPIO!");
+                System.out.println("Vuoi recuperare 1 HP? [1 = Si / 2 = No]");
+                System.out.print("> ");
+                if (scanner.nextLine().trim().equals("1")) {
+                    versetti.applicaCura(giocatore);
+                }
+            }
+
+            // 2. RUNA DI RENGORN (Interattiva se si fa un DOPPIO)
+            if (obj instanceof RunaDiRengorn runa && esito.isDoppio()) {
+                System.out.println("\n[RELIQUIA: Runa di Rengorn] Hai ottenuto un DOPPIO!");
+                System.out.println("Vuoi convertire il DOPPIO in un simbolo SINGOLO a tua scelta? (Perderai i benefici del doppio) [1 = Si / 2 = No]");
+                System.out.print("> ");
+                if (scanner.nextLine().trim().equals("1")) {
+                    System.out.println("Scegli il simbolo desiderato:");
+                    System.out.println("[1] FORZA | [2] ASTUZIA | [3] SAGGEZZA");
+                    System.out.print("> ");
+                    String sc = scanner.nextLine().trim();
+                    Simbolo scelto = sc.equals("1") ? Simbolo.FORZA : (sc.equals("2") ? Simbolo.ASTUZIA : Simbolo.SAGGEZZA);
+
+                    runa.trasformaDoppioInSingolo(scelto);
+                    // Aggiorna visivamente o logicamente il simbolo dell'esito
+                }
+            }
+
+            // 3. FRAMMENTO DELLA FURIA (Interattiva, 1 volta per turno su DOPPIO)
+            if (obj instanceof FrammentoDellaFuria furia && esito.isDoppio()) {
+                if (furia.canUsa()) {
+                    System.out.println("\n[RELIQUIA: Frammento della Furia] Hai ottenuto un DOPPIO!");
+                    System.out.println("Vuoi attivare la Furia per rilanciare il dado e sommare entrambi i risultati? [1 = Si / 2 = No]");
+                    System.out.print("> ");
+                    if (scanner.nextLine().trim().equals("1")) {
+                        furia.attivaEffetto();
+                        FacciaDado secondoLancio = giocatore.lanciaDado();
+                        System.out.println("Secondo lancio ottenuto: " + secondoLancio.getSimboloPrincipale());
+                        // Entrambi i risultati ora si sommano nella risoluzione del combattimento/prova
+                    }
+                }
+            }
+        }
+    }
+
     // Gestisce il tiro del dado verificando se l'arma equipaggiata permette il rilancio sul simbolo uscito
     public static FacciaDado gestisciLancioConArma(Personaggio giocatore) {
         Scanner scan = new Scanner(System.in);
@@ -246,6 +316,16 @@ public class GestorePartita {
                 }
             }
         }
+        return esito;
+    }
+
+    // Metodo CENTRALIZZATO per tutti i lanci di dado del gioco
+    public static FacciaDado eseguiLancioCompleto(Personaggio giocatore, Scanner scanner) {
+        // 1. Lancia il dado e gestisce i reroll dell'Arma
+        FacciaDado esito = gestisciLancioConArma(giocatore);
+
+        // 2. Controlla e attiva le Reliquie (Versetti, Runa, Furia)
+        gestisciEffettiReliquie(giocatore, esito, scanner);
 
         return esito;
     }

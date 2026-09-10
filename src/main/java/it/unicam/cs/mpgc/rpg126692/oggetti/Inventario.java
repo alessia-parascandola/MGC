@@ -1,5 +1,7 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti;
 
+import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.PietreDellaDuplicazione;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,5 +96,12 @@ public class Inventario {
             oggetti.clear();
             System.out.println("Tutti gli oggetti nelle tue mani sono stati scartati!");
         }
+    }
+
+    public boolean haPietreDellaDuplicazione() {
+        for (Oggetto obj : oggetti) {
+            if (obj instanceof PietreDellaDuplicazione) return true;
+        }
+        return false;
     }
 }
