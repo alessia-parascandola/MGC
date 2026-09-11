@@ -4,50 +4,81 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 import it.unicam.cs.mpgc.rpg126692.personaggi.PersonaggioFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 public class SelezionePersonaggioController {
+
+    @FXML
+    private Button btnContinua;
 
     private Personaggio personaggioSelezionato;
 
     @FXML
     public void initialize() {
-        System.out.println("Schermata Selezione Personaggio caricata con successo!");
+        // Il pulsante continua parte disabilitato finché non si sceglie una carta
+        if (btnContinua != null) {
+            btnContinua.setDisable(true);
+        }
     }
 
     @FXML
     private void handleSelezionePersonaggio(ActionEvent event) {
-        // Recuperiamo il pulsante che è stato cliccato
-        Button btnCliccato = (Button) event.getSource();
-        String idPulsante = btnCliccato.getId();
+        Node sorgente = (Node) event.getSource();
+        String idPulsante = sorgente.getId();
 
-        // Creiamo il personaggio corrispondente in base all'fx:id del pulsante
+        if (idPulsante == null) return;
+
+        // Assegniamo il personaggio temporaneo in base alla carta cliccata
         switch (idPulsante) {
-            case "btnCook":
-                personaggioSelezionato = PersonaggioFactory.creaCook();
-                break;
-            case "btnAbbot":
-                personaggioSelezionato = PersonaggioFactory.creaAbbot();
-                break;
-            case "btnTailor":
-                personaggioSelezionato = PersonaggioFactory.creaTailor();
-                break;
-            case "btnMiller":
-                personaggioSelezionato = PersonaggioFactory.creaMiller();
-                break;
-            case "btnTanner":
-                personaggioSelezionato = PersonaggioFactory.creaTanner();
-                break;
-            case "btnSmith":
-                personaggioSelezionato = PersonaggioFactory.creaSmith();
-                break;
-            default:
-                System.err.println("Pulsante non riconosciuto: " + idPulsante);
+            case "btnCook" -> personaggioSelezionato = PersonaggioFactory.creaCook();
+            case "btnAbbot" -> personaggioSelezionato = PersonaggioFactory.creaAbbot();
+            case "btnTailor" -> personaggioSelezionato = PersonaggioFactory.creaTailor();
+            case "btnMiller" -> personaggioSelezionato = PersonaggioFactory.creaMiller();
+            case "btnTanner" -> personaggioSelezionato = PersonaggioFactory.creaTanner();
+            case "btnSmith" -> personaggioSelezionato = PersonaggioFactory.creaSmith();
+            default -> {
                 return;
+            }
         }
 
-        System.out.println("Personaggio selezionato: " + personaggioSelezionato.getNome());
+        System.out.println("Scelta temporanea: " + personaggioSelezionato.getNome());
 
-        // TODO: Passare il personaggioSelezionato alla schermata di gioco/mappa e cambiare scena
+        // Abilitiamo il pulsante CONTINUA
+        if (btnContinua != null) {
+            btnContinua.setDisable(false);
+        }
+    }
+
+    @FXML
+    private void handleContinuaClick(ActionEvent event) {
+        if (personaggioSelezionato == null) return;
+
+        System.out.println("SCELTA CONFERMATA: " + personaggioSelezionato.getNome());
+
+        try {
+            // 1. Carica il file FXML della schermata di gioco
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SchermataGioco.fxml"));
+            Parent root = loader.load();
+
+            // 2. Recupera il GiocoController e gli passa il personaggio selezionato
+            GiocoController giocoController = loader.getController();
+            if (giocoController != null) {
+                giocoController.setPersonaggio(personaggioSelezionato);
+            }
+
+            // 3. Effettua lo switch di scena sulla stessa finestra (Stage)
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            System.err.println("Errore durante il caricamento di SchermataGioco.fxml:");
+            e.printStackTrace();
+        }
     }
 }
