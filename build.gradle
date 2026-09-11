@@ -4,7 +4,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
-group = 'org.example'
+group = 'it.unicam.cs.mpgc.rpg126692'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -12,11 +12,11 @@ repositories {
 }
 
 javafx {
-    version = "25.0.3"
+    version = "25"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 application {
-    mainClass = 'it.unicam.cs.mpgc.rpg126692.Main'
+    mainClass = 'it.unicam.cs.mpgc.rpg126692.gui.MainGUI'
 }
 
 run {
