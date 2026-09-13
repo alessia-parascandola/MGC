@@ -42,12 +42,4 @@ Tutto il codice prodotto è stato attentamente revisionato, testato e integrato 
 la piena comprensione e il rispetto dei requisiti. Per una descrizione dettagliata, consultare la Wiki del repository.
 
 📌 Per una descrizione più dettagliata dell’uso dell’AI, utilizzare la **Wiki del repository**.
-Oppure:
-- Non sono stati utilizzati strumenti di AI
 
----
-
-
-## ⚠️ Nota
-
-Questo è un template: **modificare e adattare tutte le parti necessarie** in base al proprio progetto
