@@ -47,6 +47,7 @@ public class Personaggio {
     public int getSaggezza(){ return saggezza; }
     public DadoPersonaggio getDado() { return dado; }
     public Inventario getInventario(){ return inventario; }
+    public String getImagePath(){ return imagePath; };
 
     // Metodi per gestire la salute
     public void subisciDanno(int danno, boolean usaEvasione, boolean paratoDaDado) {

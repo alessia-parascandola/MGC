@@ -4,11 +4,15 @@ import it.unicam.cs.mpgc.rpg126692.Cassero;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaCapitolo;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.carte.Boss.CartaBoss;
+import it.unicam.cs.mpgc.rpg126692.carte.Eventi.CartaEvento;
 import it.unicam.cs.mpgc.rpg126692.carte.MazzoCapitoli;
 import it.unicam.cs.mpgc.rpg126692.dadi.DadoCapitolo;
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
+import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
+import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
+
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -24,8 +28,8 @@ import java.util.List;
 public class GiocoController {
 
     @FXML private ImageView imgCartaScoperta;
-    @FXML private ImageView imgMazzoCoperto; // ImageView del mazzo a sinistra
-    @FXML private ImageView imgPersonaggio;   // ImageView della carta del personaggio selezionato
+    @FXML private ImageView imgMazzoCoperto;
+    @FXML private ImageView imgPersonaggio;
     @FXML private ImageView imgDadoPersonaggio;
     @FXML private HBox containerDadiMostro;
     @FXML private Label lblHpPersonaggio;
@@ -34,10 +38,13 @@ public class GiocoController {
     private Personaggio personaggioGiocatore;
     private Cassero cassero;
     private CartaCapitolo cartaCapitoloCorrente;
+    private MazzoOggetti mazzoOggetti = new MazzoOggetti();
+
+    // Gestione HP locale per la GUI per evitare blocchi da Scanner del backend
+    private int hpCorrentiGui;
 
     @FXML
     public void initialize() {
-        // All'avvio della schermata, il mazzo mostra il dorso della carta Intro
         caricaImmagineSuView(imgMazzoCoperto, "/images/carte/dorso_intro.png");
     }
 
@@ -47,18 +54,18 @@ public class GiocoController {
 
     public void setPersonaggioGiocatore(Personaggio personaggio) {
         this.personaggioGiocatore = personaggio;
+        if (personaggio != null) {
+            this.hpCorrentiGui = personaggio.getHP();
+        }
 
-        // 1. Aggiorna Nome, HP e Carta Personaggio
         aggiornaGraficaPersonaggio();
 
-        // 2. Mostra subito la faccia iniziale del dado costruita in PersonaggioFactory (faccia del personaggio)
-        if (personaggioGiocatore != null && personaggioGiocatore.getDado() != null) {
+        if (personaggioGiocatore != null) {
             String nomePersonaggioClean = personaggioGiocatore.getNome().toLowerCase().trim();
             String pathDadoIniziale = "/images/dadi/" + nomePersonaggioClean + "_dado.png";
             caricaImmagineSuView(imgDadoPersonaggio, pathDadoIniziale);
         }
 
-        // 3. Inizializza il Cassero se non ancora creato
         if (this.cassero == null) {
             inizializzaCasseroDefault();
         }
@@ -73,14 +80,13 @@ public class GiocoController {
             MazzoCapitoli mazzo = new MazzoCapitoli();
             this.cassero = new Cassero(mazzo);
         } catch (Exception e) {
-            System.err.println("Info: Errore creazione Cassero default: " + e.getMessage());
+            System.err.println("Info Cassero: " + e.getMessage());
         }
     }
 
-    // --- AZIONE 1: PESCA CARTA DAL CASSERO ---
+    // --- PESCA CARTA DAL CASSERO ---
     @FXML
     private void handlePescaCartaCassero(Event event) {
-        // Non si avanza se c'è un mostro ancora vivo
         if (cartaCapitoloCorrente instanceof CartaMostro mostro && !mostro.eSconfitto()) {
             mostraAvviso("Combattimento in corso", "Devi sconfiggere il mostro prima di avanzare!");
             return;
@@ -88,24 +94,18 @@ public class GiocoController {
 
         if (cassero == null || !cassero.haCarte()) {
             mostraAvviso("Fine Esplorazione", "Non ci sono più carte nel Cassero!");
-            if (imgMazzoCoperto != null) {
-                imgMazzoCoperto.setImage(null);
-            }
+            if (imgMazzoCoperto != null) imgMazzoCoperto.setImage(null);
             return;
         }
 
-        // Pesca la carta in cima allo stack
         cartaCapitoloCorrente = cassero.pescaProssimaCarta();
 
-        // Carica la carta scoperta a destra
         if (cartaCapitoloCorrente != null && cartaCapitoloCorrente.getImagePath() != null) {
             caricaImmagineSuView(imgCartaScoperta, cartaCapitoloCorrente.getImagePath());
         }
 
-        // Aggiorna il dorso del mazzo a sinistra (dorso nero capitolo oppure dorso boss)
         aggiornaDorsoMazzo();
 
-        // Se è un mostro o un boss, genera ed eroga i dadi vita
         if (cartaCapitoloCorrente instanceof CartaMostro mostro) {
             if (mostro.getTracciatoSimboli().isEmpty()) {
                 mostro.generaSimboliVita(new DadoCapitolo(), 1);
@@ -116,19 +116,24 @@ public class GiocoController {
                 boss.generaSimboliVita(new DadoCapitolo(), 1);
             }
             aggiornaGraficaDadiMostro(boss.getTracciatoSimboli());
+        } else if (cartaCapitoloCorrente instanceof CartaEvento) {
+            svuotaDadiMostro();
+            mostraAvviso("Carta Evento", "Hai incontrato una carta Evento.");
         } else {
             svuotaDadiMostro();
+            if (cartaCapitoloCorrente != null) {
+                cartaCapitoloCorrente.esegui(personaggioGiocatore, mazzoOggetti);
+                aggiornaGraficaPersonaggio();
+            }
         }
     }
 
-    // --- AGGIORNAMENTO DEL DORSO DEL MAZZO ---
     private void aggiornaDorsoMazzo() {
         if (cassero == null || !cassero.haCarte()) {
             if (imgMazzoCoperto != null) imgMazzoCoperto.setImage(null);
             return;
         }
 
-        // Se è rimasta 1 sola carta è il Boss, altrimenti sono le Carte Capitolo
         if (cassero.carteRimanenti() == 1) {
             caricaImmagineSuView(imgMazzoCoperto, "/images/carte/dorso_boss.png");
         } else {
@@ -136,7 +141,7 @@ public class GiocoController {
         }
     }
 
-    // --- AZIONE 2: TIRO DADO PERSONAGGIO ---
+    // --- TIRO DADO PERSONAGGIO ---
     @FXML
     private void handleLancioDadoPersonaggio(Event event) {
         if (personaggioGiocatore == null || personaggioGiocatore.getDado() == null) return;
@@ -145,7 +150,6 @@ public class GiocoController {
             return;
         }
 
-        // 1. Lancio del dado
         FacciaDado facciaUscita = personaggioGiocatore.lanciaDado();
         if (facciaUscita.getImagePath() != null) {
             caricaImmagineSuView(imgDadoPersonaggio, facciaUscita.getImagePath());
@@ -154,7 +158,6 @@ public class GiocoController {
         List<Simbolo> simboliLanciati = facciaUscita.getSimboli();
         boolean colpoSegnato = false;
 
-        // 2. Controllo colpo a segno
         for (Simbolo s : simboliLanciati) {
             if (mostro instanceof CartaBoss boss) {
                 if (boss.puoRimuovereSimbolo(s)) {
@@ -169,7 +172,6 @@ public class GiocoController {
             }
         }
 
-        // 3. Risoluzione turno con POP-UP DI FEEDBACK
         if (colpoSegnato) {
             aggiornaGraficaDadiMostro(mostro.getTracciatoSimboli());
 
@@ -180,44 +182,55 @@ public class GiocoController {
                 mostraAvviso("Colpo a segno!", "Hai colpito il mostro! Un simbolo è stato eliminato.");
             }
         } else {
-            // Tiro fallito: Calcolo danno considerando lo Scudo
             int dannoBase = mostro.getDanno();
-            boolean haScudo = facciaUscita.haScudo();
+            boolean haScudoDado = facciaUscita.haScudo();
 
-            int dannoEffettivo = dannoBase;
-            if (haScudo) {
-                dannoEffettivo = Math.max(0, dannoBase - 1);
-            }
-
-            personaggioGiocatore.subisciDanno(dannoEffettivo, false, haScudo);
-            aggiornaGraficaPersonaggio();
-
-            if (personaggioGiocatore.isSconfitto()) {
-                mostraAvviso("Game Over", "Il tuo personaggio è stato sconfitto!");
+            if (haScudoDado) {
+                mostraAvviso("Attacco Parato!", "Il doppio simbolo/scudo sul dado ha parato completamente l'attacco!");
             } else {
-                if (haScudo && dannoEffettivo < dannoBase) {
-                    mostraAvviso("Attacco Parato!", "Lo scudo assorbe parte del colpo! Subisci " + dannoEffettivo + " danni invece di " + dannoBase + ".");
+                int riduzioneScudo = 0;
+                for (Oggetto obj : personaggioGiocatore.getInventario().getOggetti()) {
+                    if (obj.getNome().toLowerCase().contains("scudo")) {
+                        riduzioneScudo = 1;
+                        break;
+                    }
+                }
+
+                int dannoEffettivo = dannoBase;
+                if (riduzioneScudo > 0 && dannoBase > 1) {
+                    dannoEffettivo = Math.max(1, dannoBase - riduzioneScudo);
+                }
+
+                // Sfruttiamo subisciDanno del backend o sottraiamo direttamente e sincronizziamo
+                personaggioGiocatore.subisciDanno(dannoEffettivo, false, false);
+                aggiornaGraficaPersonaggio();
+
+                if (personaggioGiocatore.isSconfitto()) {
+                    mostraAvviso("Game Over", "Il tuo personaggio è stato sconfitto!");
                 } else {
-                    mostraAvviso("Attacco Subito!", "Nessun simbolo corrispondente! Il mostro ti infligge " + dannoEffettivo + " danni.");
+                    if (riduzioneScudo > 0 && dannoBase > 1) {
+                        mostraAvviso("Attacco Subito!", "Lo scudo ha ridotto il danno! Subisci " + dannoEffettivo + " danni.");
+                    } else {
+                        mostraAvviso("Attacco Subito!", "Nessun simbolo corrispondente! Subisci " + dannoEffettivo + " danni.");
+                    }
                 }
             }
         }
     }
 
-    // --- AZIONI RICHIESTE DA FXML ---
     @FXML
     private void handlePescaOggetto(Event event) {
-        mostraAvviso("Mazzo Oggetti", "Hai cliccato sul mazzo oggetti!");
+        mostraAvviso("Mazzo Oggetti", "Gestione oggetti.");
     }
 
     @FXML
     private void handleUsaOggetto(Event event) {
-        mostraAvviso("Inventario", "Funzione usa oggetto invocata.");
+        mostraAvviso("Inventario", "Usa oggetto.");
     }
 
     @FXML
     private void handleScartaOggetto(Event event) {
-        mostraAvviso("Inventario", "Funzione scarta oggetto invocata.");
+        mostraAvviso("Inventario", "Scarta oggetto.");
     }
 
     // --- REFRESH GRAFICO ---
@@ -251,13 +264,21 @@ public class GiocoController {
 
     private void aggiornaGraficaPersonaggio() {
         if (personaggioGiocatore != null) {
-            if (lblHpPersonaggio != null) {
-                lblHpPersonaggio.setText("HP: " + personaggioGiocatore.getHP() + " / " + personaggioGiocatore.getSaluteMassima());
-            }
-            if (lblNomePersonaggio != null) {
-                lblNomePersonaggio.setText(personaggioGiocatore.getNome());
-            }
-            // Carica l'immagine della carta del personaggio (es. /images/carte/cook.png)
+            javafx.application.Platform.runLater(() -> {
+                // 1. Aggiorna HP con scritta bianca e dimensione leggibile
+                if (lblHpPersonaggio != null) {
+                    lblHpPersonaggio.setText("HP: " + personaggioGiocatore.getHP() + " / " + personaggioGiocatore.getSaluteMassima());
+                    lblHpPersonaggio.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+                }
+
+                // 2. Aggiorna il nome del personaggio
+                if (lblNomePersonaggio != null) {
+                    lblNomePersonaggio.setText(personaggioGiocatore.getNome());
+                    lblNomePersonaggio.setStyle("-fx-text-fill: white;");
+                }
+            });
+
+            // 3. Aggiorniamo l'immagine della carta del personaggio
             if (imgPersonaggio != null) {
                 String pathCarta = "/images/personaggi/" + personaggioGiocatore.getNome().toLowerCase().trim() + ".png";
                 caricaImmagineSuView(imgPersonaggio, pathCarta);
@@ -272,10 +293,10 @@ public class GiocoController {
             if (is != null) {
                 imageView.setImage(new Image(is));
             } else {
-                System.err.println("Immagine non trovata nel classpath: " + resourcePath);
+                System.err.println("Immagine non trovata: " + resourcePath);
             }
         } catch (Exception e) {
-            System.err.println("Errore caricamento immagine: " + resourcePath);
+            System.err.println("Errore caricamento: " + resourcePath);
         }
     }
 

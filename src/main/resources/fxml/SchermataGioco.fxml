@@ -28,7 +28,7 @@
             <ColorAdjust brightness="-0.24" />
          </effect>
       </ImageView>
-      <Label fx:id="lblHP" layoutX="81.0" layoutY="266.0" prefHeight="67.0" prefWidth="185.0" text="HP: 35/35" textFill="WHITE">
+      <Label fx:id="lblHpPersonaggio" layoutX="81.0" layoutY="266.0" prefHeight="67.0" prefWidth="185.0" textFill="WHITE">
          <font>
             <Font name="Georgia" size="28.0" />
          </font>
