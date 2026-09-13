@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class AppGUI extends Application {
@@ -12,13 +11,12 @@ public class AppGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // Carica la prima schermata FXML dalla cartella resources/fxml/
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SchermataIntro.fxml"));
             Scene scene = new Scene(loader.load());
 
             primaryStage.setTitle("Fuga dal Cassero - RPG Game");
             primaryStage.setScene(scene);
-            primaryStage.setResizable(false); // Impedisce al giocatore di deformare la finestra
+            primaryStage.setResizable(false);
             primaryStage.show();
 
         } catch (IOException e) {
