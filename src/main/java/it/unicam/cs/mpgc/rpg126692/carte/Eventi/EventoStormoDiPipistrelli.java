@@ -15,7 +15,7 @@ public class EventoStormoDiPipistrelli extends CartaEvento{
         super("All'improvviso, uno stormo di pipistrelli giganti irrompe nel corridoio. \n" +
                 "Puoi solo cercare di ripararti dal soverchiante turbinare di ali e zanne.\n" +
                 "Difenditi: tira il DadoPersonaggio insieme a tre DadiCapitolo, per ogni simbolo\n" +
-                "corrispondente perdi 1HP, ma se ti esce un DOPPIO non vieni ferito!");
+                "corrispondente perdi 1HP, ma se ti esce un DOPPIO non vieni ferito!", "/images/cassero/pipistrelli.png");
     }
 
     @Override

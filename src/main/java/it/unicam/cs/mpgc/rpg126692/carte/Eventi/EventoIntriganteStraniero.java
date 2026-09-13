@@ -14,7 +14,7 @@ public class EventoIntriganteStraniero extends CartaEvento{
                 "non ti sembra una buona idea rifiutare. Del resto, che male può fare? \n" +
                 "Fai una scelta:\n" +
                 "1. Bevi un piccolo sorso. \n" +
-                "2. Bevi un lungo sorso.");
+                "2. Bevi un lungo sorso.", "/images/cassero/straniero.png");
     }
 
     // Stampa iniziale del capitolo

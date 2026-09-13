@@ -11,6 +11,7 @@ public class Mutaforma extends CartaBoss{
                 "I risultati doppi contano come un solo colpo andato a segno contro il Mutaforma. " +
                         "Alla fine di ogni turno di combattimento, se il Mutaforma non è stato sconfitto, " +
                         "cambia aspetto: rilancia tutti i suoi dadi Capitolo rimanenti.",
+                "/images/cassero/boss_mutaforma.png",
                 List.of(Simbolo.FORZA, Simbolo.FORZA, Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), 3);
     }
 

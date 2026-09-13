@@ -13,7 +13,7 @@ public class EventoPioggiaAcido extends CartaEvento{
 
     public EventoPioggiaAcido(){
         super("Inavvertitamente, il tuo stivale inciampa sul filo di una trappola che rilascia una pioggia d'acido dall'alto!\n" +
-                "Esegui una prova di ASTUZIA per schivare!");
+                "Esegui una prova di ASTUZIA per schivare!", "/images/cassero/acido.png");
     }
 
     @Override

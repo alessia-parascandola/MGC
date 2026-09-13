@@ -19,8 +19,8 @@ public class CartaMostro extends CartaCapitolo{
     // Danno che il mostro infligge al personaggio
     private final int danno;
 
-    public CartaMostro(String descrizione, List<Simbolo> simboliFissi, int danno){
-        super(descrizione);
+    public CartaMostro(String descrizione, String imagePath, List<Simbolo> simboliFissi, int danno){
+        super(descrizione, imagePath);
         this.simboliFissi = (simboliFissi != null) ? simboliFissi : new ArrayList<>();      // Se non ci sono simboli fissi sulla carta, inizializza una lista vuota
         this.tracciatoSimboli = new ArrayList<>();
         this.danno = danno;

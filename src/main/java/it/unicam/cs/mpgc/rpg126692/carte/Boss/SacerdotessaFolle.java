@@ -11,6 +11,7 @@ public class SacerdotessaFolle extends CartaBoss{
                 "La Sacerdotessa è protetta dai suoi tirapiedi invasati (la riga di dadi Capitolo con " +
                         "il simbolo POSSANZA). Tutti questi dadi devono essere rimossi prima di poter attaccare la " +
                         "Sacerdotessa (i dadi Capitolo posizionati dietro la linea con il simbolo POSSANZA).",
+                "/images/cassero/boss_sacerdotessa.png",
                 List.of(Simbolo.FORZA, Simbolo.FORZA, Simbolo.FORZA, Simbolo.SAGGEZZA), 3);
     }
 

@@ -11,8 +11,7 @@ public class TerroreDelSottosuolo extends CartaBoss{
         super("Terrore del Sottosuolo", "Il dolore mi rende soltanto più forte!",
                 "Alla fine di ogni turno di combattimento, se il Terrore del Sottosuolo " +
                         "non è stato sconfitto, diventa più forte: lancia un dado Capitolo e aggiungilo " +
-                        "ai dadi Capitolo rimanenti.",
-                List.of(Simbolo.FORZA, Simbolo.ASTUZIA, Simbolo.ASTUZIA, Simbolo.ASTUZIA), 3);
+                        "ai dadi Capitolo rimanenti.", "/images/cassero/boss_terrore.png", List.of(Simbolo.FORZA, Simbolo.ASTUZIA, Simbolo.ASTUZIA, Simbolo.ASTUZIA), 3);
     }
 
     @Override

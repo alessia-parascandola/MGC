@@ -12,7 +12,7 @@ public class EventoBarattoUomoNascosto extends CartaEvento{
                 "spalle e poi, sussurrando, ti chiede se sei interessato a barattare. \n" +
                 "Opzioni:\n" +
                 "1. Baratta (Scarta 1 Oggetto e ne peschi 2)\n" +
-                "2. Tratta (Prova su DOPPIO: se riesci peschi 1 Oggetto)");
+                "2. Tratta (Prova su DOPPIO: se riesci peschi 1 Oggetto)", "/images/cassero/uomo_nascosto.png");
     }
 
     @Override

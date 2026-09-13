@@ -12,7 +12,7 @@ public class CartaIntro extends CartaCapitolo {
                         "In una piccola stanza di roccia adiacente alle prigioni trovi un vecchio forziere di legno.\n" +
                         "La serratura è aperta... \n" +
                         "Odi l'avvicinarsi di passi. Non puoi fermarti a lungo. Ti dirigi verso l'uscita, sgattaiolando e sparendo nell'oscurità...\n" +
-                        "Gira ora la prima CartaCapitolo.");
+                        "Gira ora la prima CartaCapitolo.",  "/images/fronte_cartaIntro.png");
     }
 
     // Implementa il metodo astratto esegui() di CartaCapitolo, definendo

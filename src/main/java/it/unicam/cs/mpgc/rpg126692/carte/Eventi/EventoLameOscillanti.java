@@ -16,7 +16,7 @@ public class EventoLameOscillanti extends CartaEvento {
                 "Studia lo schema dei loro movimenti e preparati a scattare verso l'altro lato.\n" +
                 "Esegui 3 tiri di schivata!\n" +
                 "(Lancia un DadoPersonaggio insieme a un DadoCapitolo 3 volte, \n" +
-                "per ogni corrispondenza perdi 2HP)");
+                "per ogni corrispondenza perdi 2HP)", "/images/cassero/lame.png");
     }
 
     @Override

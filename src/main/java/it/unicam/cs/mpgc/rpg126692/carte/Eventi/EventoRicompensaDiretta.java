@@ -9,8 +9,8 @@ public class EventoRicompensaDiretta extends CartaEvento {
     private final int quantitaOggetti;
     private final int dannoSubito;
 
-    public EventoRicompensaDiretta(String descrizione, int quantitaOggetti, int dannoSubito){
-        super(descrizione);
+    public EventoRicompensaDiretta(String descrizione, String imagePath, int quantitaOggetti, int dannoSubito){
+        super(descrizione, imagePath);
         this.quantitaOggetti = quantitaOggetti;
         this.dannoSubito = dannoSubito;
     }

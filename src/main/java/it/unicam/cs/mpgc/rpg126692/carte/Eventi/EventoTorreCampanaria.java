@@ -13,7 +13,8 @@ public class EventoTorreCampanaria extends CartaEvento{
         super("Sali lungo una stretta scala a chiocciola ed emergi in cima a una torre campanaria \n" +
                 "sferzata dal vento. Mentre attraversi la torre, la campana inizia a oscillare, \n" +
                 "facendo tremare le tue ossa con il suo tetro rintocco. \n" +
-                "Prova di SAGGEZZA o DOPPIO per resistere al suono asfissiante della campana!");
+                "Prova di SAGGEZZA o DOPPIO per resistere al suono asfissiante della campana!",
+                "/images/cassero/campana.png");
     }
 
     @Override

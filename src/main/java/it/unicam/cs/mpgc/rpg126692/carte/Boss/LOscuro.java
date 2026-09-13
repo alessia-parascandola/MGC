@@ -10,7 +10,7 @@ public class LOscuro extends CartaBoss{
     public LOscuro(){
         super("L'Oscuro", "I vostri patetici ninnoli non sono all'altezza della mia magia oscura!",
                 "Non appena arrivi al cospetto dell'Oscuro, gli Oggetti che stai trasportando evaporano. Scartali tutti immediatamente.",
-                List.of(Simbolo.ASTUZIA, Simbolo.SAGGEZZA, Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), 3);
+                "/images/cassero/boss_oscuro.png", List.of(Simbolo.ASTUZIA, Simbolo.SAGGEZZA, Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), 3);
     }
 
     @Override
