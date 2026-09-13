@@ -19,7 +19,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/saggezza.png")
         ));
 
-        return new Personaggio(35, "Cook", 4, 3, 1, dadoCook);
+        return new Personaggio(35, "Cook", 4, 3, 1, dadoCook, "/images/personaggi/cook.png");
     }
 
     public static Personaggio creaAbbot(){
@@ -32,7 +32,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/astuzia.png")
         ));
 
-        return new Personaggio(35, "Abbot", 3, 1, 4, dadoAbbot);
+        return new Personaggio(35, "Abbot", 3, 1, 4, dadoAbbot, "/images/personaggi/abbot.png");
     }
 
     public static Personaggio creaTailor(){
@@ -45,7 +45,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/forza.png")
         ));
 
-        return new Personaggio(35, "Tailor", 1, 4, 3, dadoTailor);
+        return new Personaggio(35, "Tailor", 1, 4, 3, dadoTailor, "/images/personaggi/tailor.png");
     }
 
     public static Personaggio creaMiller(){
@@ -58,7 +58,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/saggezza.png")
         ));
 
-        return new Personaggio(35, "Miller", 3, 4, 1, dadoMiller);
+        return new Personaggio(35, "Miller", 3, 4, 1, dadoMiller, "/images/personaggi/miller.png");
     }
 
     public static Personaggio creaTanner(){
@@ -71,7 +71,7 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/forza.png")
         ));
 
-        return new Personaggio(35, "Tanner", 1, 3, 4, dadoTanner);
+        return new Personaggio(35, "Tanner", 1, 3, 4, dadoTanner, "/images/personaggi/tanner.png");
     }
 
     public static Personaggio creaSmith(){
@@ -84,6 +84,6 @@ public class PersonaggioFactory {
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/astuzia.png")
         ));
 
-        return new Personaggio(35, "Smith", 4, 1, 3, dadoSmith);
+        return new Personaggio(35, "Smith", 4, 1, 3, dadoSmith, "/images/personaggi/smith.png");
     }
 }

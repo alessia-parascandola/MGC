@@ -16,8 +16,9 @@ public class Personaggio {
     private final int saggezza;
     private final DadoPersonaggio dado;
     private Inventario inventario;
+    private final String imagePath;
 
-    public Personaggio(int hp, String nome, int forza, int astuzia, int saggezza, DadoPersonaggio dado){
+    public Personaggio(int hp, String nome, int forza, int astuzia, int saggezza, DadoPersonaggio dado, String imagePath){
         if(hp <= 0 || hp > saluteMassimaDefault){
             throw new IllegalArgumentException("Gli HP iniziali devono essere compresi tra 1 e 35!");
         }
@@ -35,6 +36,7 @@ public class Personaggio {
         this.saggezza = saggezza;
         this.dado = dado;
         this.inventario = new Inventario();     // Crea un inventario vuoto all'inizio
+        this.imagePath = imagePath;
     }
 
     // Getter

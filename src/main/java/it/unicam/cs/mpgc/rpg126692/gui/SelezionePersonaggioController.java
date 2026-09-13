@@ -68,7 +68,7 @@ public class SelezionePersonaggioController {
             // 2. Recupera il GiocoController e gli passa il personaggio selezionato
             GiocoController giocoController = loader.getController();
             if (giocoController != null) {
-                giocoController.setPersonaggio(personaggioSelezionato);
+                giocoController.setPersonaggioGiocatore(personaggioSelezionato);
             }
 
             // 3. Effettua lo switch di scena sulla stessa finestra (Stage)
