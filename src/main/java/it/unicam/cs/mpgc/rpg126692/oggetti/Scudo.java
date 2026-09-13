@@ -6,8 +6,8 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 public class Scudo extends Oggetto {
     private final int riduzioneDanno;
 
-    public Scudo(String nome, String descrizione, int riduzioneDanno){
-        super(nome, descrizione);
+    public Scudo(String nome, String descrizione, String imagePath, int riduzioneDanno){
+        super(nome, descrizione, imagePath);
         this.riduzioneDanno = riduzioneDanno;
     }
 

@@ -6,8 +6,8 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
     // EVASIONE EFFERVESCENTE
 public class PozioneEvasione extends Pozione {
 
-    public PozioneEvasione(String nome, String descrizione) {
-        super(nome, descrizione);
+    public PozioneEvasione(String nome, String descrizione, String imagePath) {
+        super(nome, descrizione, imagePath);
     }
 
     @Override

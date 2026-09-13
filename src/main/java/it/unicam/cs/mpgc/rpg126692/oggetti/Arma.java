@@ -9,8 +9,8 @@ public class Arma extends Oggetto {
     private Simbolo simboloRilancio;        // null se non abilita il reroll
     private boolean daDadoCapitoloExtra;    // true per l'ascia bipenne
 
-    public Arma (String nome, String descrizione, int maniRichieste, Simbolo simboloRilancio, boolean daDadoCapitoloExtra){
-        super(nome, descrizione);
+    public Arma (String nome, String descrizione, String imagePath, int maniRichieste, Simbolo simboloRilancio, boolean daDadoCapitoloExtra){
+        super(nome, descrizione, imagePath);
         this.maniRichieste = maniRichieste;
         this.simboloRilancio = simboloRilancio;
         this.daDadoCapitoloExtra = daDadoCapitoloExtra;

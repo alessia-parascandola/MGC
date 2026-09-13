@@ -5,8 +5,8 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 public class VersettiCurativi extends Reliquia {
 
-    public VersettiCurativi (String nome, String descrizione){
-        super(nome, descrizione);
+    public VersettiCurativi (String nome, String descrizione, String imagePath){
+        super(nome, descrizione, imagePath);
     }
 
     @Override

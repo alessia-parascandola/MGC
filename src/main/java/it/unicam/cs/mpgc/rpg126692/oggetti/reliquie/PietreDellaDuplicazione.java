@@ -5,8 +5,8 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 public class PietreDellaDuplicazione extends Reliquia {
 
-    public PietreDellaDuplicazione(String nome, String descrizione) {
-        super(nome, descrizione);
+    public PietreDellaDuplicazione(String nome, String descrizione, String imagePath) {
+        super(nome, descrizione, imagePath);
     }
 
     @Override

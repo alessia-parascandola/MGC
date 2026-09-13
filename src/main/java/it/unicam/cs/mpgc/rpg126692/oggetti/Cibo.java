@@ -6,8 +6,8 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 public class Cibo extends Oggetto{
     private int puntiCura;
 
-    public Cibo(String nome, String descrizione, int puntiCura){
-        super(nome, descrizione);
+    public Cibo(String nome, String descrizione, String imagePath, int puntiCura){
+        super(nome, descrizione, imagePath);
         this.puntiCura = puntiCura;
     }
 

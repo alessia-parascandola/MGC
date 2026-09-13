@@ -6,8 +6,8 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
     // FORTUNA LIQUIDA
 public class PozioneFortuna extends Pozione {
 
-    public PozioneFortuna(String nome, String descrizione) {
-        super(nome, descrizione);
+    public PozioneFortuna(String nome, String descrizione, String imagePath) {
+        super(nome, descrizione, imagePath);
     }
 
     @Override

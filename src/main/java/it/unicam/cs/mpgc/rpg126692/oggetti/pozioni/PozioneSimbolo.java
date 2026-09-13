@@ -7,8 +7,8 @@ import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 public class PozioneSimbolo extends Pozione {
     private final Simbolo simboloOttenuto;
 
-    public PozioneSimbolo(String nome, String descrizione, Simbolo simboloOttenuto){
-        super(nome, descrizione);
+    public PozioneSimbolo(String nome, String descrizione, String imagePath, Simbolo simboloOttenuto){
+        super(nome, descrizione, imagePath);
         this.simboloOttenuto = simboloOttenuto;
     }
 
