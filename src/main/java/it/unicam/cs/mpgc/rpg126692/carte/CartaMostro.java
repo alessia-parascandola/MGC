@@ -59,6 +59,11 @@ public class CartaMostro extends CartaCapitolo{
     }
 
     @Override
+    public String getImagePath() {
+        return super.getImagePath();
+    }
+
+    @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
         System.out.println(getDescrizione());
 

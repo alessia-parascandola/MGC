@@ -11,7 +11,8 @@ public class SignoreDelleTenebre extends CartaBoss{
         super("Il Signore delle Tenebre", "Sarò anche cieco, ma vedo più di quanto tu possa immaginare!",
                 "Ogni turno, dopo aver applicato il normale danno causato dal Signore delle Tenebre, " +
                         "il Gargoyle attacca e non può essere bloccato.",
-                "/images/cassero/boss_signore.png", List.of(Simbolo.FORZA, Simbolo.ASTUZIA, Simbolo.ASTUZIA, Simbolo.SAGGEZZA), 3);
+                "/images/cassero/boss_signore.png",
+                List.of(Simbolo.FORZA, Simbolo.ASTUZIA, Simbolo.ASTUZIA, Simbolo.SAGGEZZA), 3);
     }
 
     @Override

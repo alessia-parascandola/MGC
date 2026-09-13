@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg126692.gui;
 
+import it.unicam.cs.mpgc.rpg126692.carte.Boss.CartaBoss;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaCapitolo;
 import it.unicam.cs.mpgc.rpg126692.carte.MazzoCapitoli;
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
@@ -8,6 +9,7 @@ import it.unicam.cs.mpgc.rpg126692.oggetti.Oggetto;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
@@ -15,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.Optional;
@@ -38,20 +41,41 @@ public class GiocoController {
     private CartaCapitolo cartaCapitoloCorrente;
     private int indiceCapitolo = 0;
     private List<CartaCapitolo> carteCapitoloEstratte; // Lista con la sequenza della partita
+    private final List<Oggetto> oggettiInMano = new ArrayList<>();
 
     @FXML
     public void initialize() {
         System.out.println("Schermata di Gioco pronta.");
 
+        // Centriamo graficamente gli oggetti dentro l'HBox della mano
+        if (containerMano != null) {
+            containerMano.setAlignment(Pos.CENTER);
+            containerMano.setSpacing(10);
+        }
+
         // Inizializziamo i mazzi backend
         this.mazzoCapitoli = new MazzoCapitoli();
         this.mazzoOggetti = new MazzoOggetti();
 
-        // Prendiamo le carte dal mazzo
-        this.carteCapitoloEstratte = mazzoCapitoli.getCarteCapitolo();
+        preparaMazzoCassero();
+    }
 
-        // MESCOLIAMO LE CARTE CAPITOLO CASUALMENTE!
-        java.util.Collections.shuffle(this.carteCapitoloEstratte);
+    /**
+     * Prepara esattamente: 15 Carte Capitolo casuali + 1 Carta Boss in fondo.
+     */
+    private void preparaMazzoCassero() {
+        List<CartaCapitolo> tutteLeCarte = mazzoCapitoli.getCarteCapitolo();
+        Collections.shuffle(tutteLeCarte);
+
+        // Prendiamo 15 carte tra mostri ed eventi
+        carteCapitoloEstratte = new ArrayList<>(tutteLeCarte.subList(0, Math.min(15, tutteLeCarte.size())));
+
+        // Scegliamo 1 Boss casuale e lo mettiamo come 16ª carta
+        List<CartaBoss> bossDisponibili = mazzoCapitoli.getCarteBoss();
+        if (!bossDisponibili.isEmpty()) {
+            Collections.shuffle(bossDisponibili);
+            carteCapitoloEstratte.add(bossDisponibili.get(0));
+        }
     }
 
     /**
@@ -140,24 +164,39 @@ public class GiocoController {
     @FXML
     private void handlePescaOggetto(Event event) {
         if (mazzoOggetti == null || mazzoOggetti.isVuoto()) {
-            System.out.println("Mazzo oggetti vuoto!");
+            mostraAvviso("Mazzo Oggetti", "Non ci sono più carte nel mazzo oggetti!");
+            return;
+        }
+
+        // Controlliamo quante mani stiamo occupando prima di pescare
+        int maniOccupateAttuali = calcolaManiOccupate();
+        if (maniOccupateAttuali >= 2) {
+            mostraAvviso("Mano Piena", "Hai le mani piene! (Max 2 mani). Scarta o usa un oggetto prima di pescarne un altro.");
             return;
         }
 
         Oggetto pescato = mazzoOggetti.pesca();
         if (pescato != null && containerMano != null) {
+            // Verifica se l'oggetto pescato a due mani supera il limite
+            int ingombroPescato = getIngombroOggetto(pescato);
+            if (maniOccupateAttuali + ingombroPescato > 2) {
+                mostraAvviso("Ingombro Oggetto", "Questo oggetto richiede " + ingombroPescato + " mani, ma hai solo " + (2 - maniOccupateAttuali) + " mano libera!");
+                // Rimettiamo la carta in cima al mazzo o la gestiamo
+                return;
+            }
+
+            oggettiInMano.add(pescato);
+
             ImageView vistaCartaOggetto = new ImageView();
             caricaImmagineSuView(vistaCartaOggetto, pescato.getImagePath());
 
-            // Dimensioni ideali per la carta dentro l'HBox della mano
             vistaCartaOggetto.setFitWidth(80);
             vistaCartaOggetto.setFitHeight(120);
             vistaCartaOggetto.setPreserveRatio(true);
 
-            // Interazione: click sull'oggetto in mano per usarlo o scartarlo
+            // Click sull'oggetto per scartarlo/usarlo
             vistaCartaOggetto.setOnMouseClicked(e -> handleUsaScartaOggetto(vistaCartaOggetto, pescato));
 
-            // Aggiunge la carta alla mano del giocatore a schermo
             containerMano.getChildren().add(vistaCartaOggetto);
         }
     }
@@ -165,9 +204,34 @@ public class GiocoController {
     private void handleUsaScartaOggetto(ImageView cartaView, Oggetto oggetto) {
         boolean conferma = mostraConfermaScelta("Usa/Scarta Oggetto", "Vuoi scartare o usare l'oggetto: " + oggetto.getNome() + "?");
         if (conferma) {
-            System.out.println("Oggetto rimosso dalla mano: " + oggetto.getNome());
+            oggettiInMano.remove(oggetto);
             containerMano.getChildren().remove(cartaView);
+            System.out.println("Oggetto rimosso dalla mano: " + oggetto.getNome());
         }
+    }
+
+    /**
+     * Calcola il numero totale di mani attualmente occupate dagli oggetti equipaggiati.
+     */
+    private int calcolaManiOccupate() {
+        int totaleMani = 0;
+        for (Oggetto obj : oggettiInMano) {
+            totaleMani += getIngombroOggetto(obj);
+        }
+        return totaleMani;
+    }
+
+    /**
+     * Riconosce se un oggetto occupa 1 o 2 mani (es. Armi a 2 mani vs Armi a 1 mano/Pozioni/Cibo).
+     */
+    private int getIngombroOggetto(Oggetto oggetto) {
+        // Se nel tuo modello l'oggetto ha un metodo o attributo getMani() o isDueMani()
+        // Ad esempio per l'Ascia bipenne o Scudi a 2 mani:
+        String nome = oggetto.getNome().toLowerCase();
+        if (nome.contains("ascia bipenne") || nome.contains("due mani")) {
+            return 2;
+        }
+        return 1;
     }
 
     private void aggiornaDorsoMazzo() {
@@ -200,14 +264,13 @@ public class GiocoController {
 
     // --- FINESTRE DI DIALOGO / POP-UP PER SCELTE E FINE GIOCO ---
 
-    public String mostraFinestraSceltaOpzioni(String titolo, String messaggio, List<String> opzioni) {
-        if (opzioni == null || opzioni.isEmpty()) return null;
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(opzioni.get(0), opzioni);
-        dialog.setTitle(titolo);
-        dialog.setHeaderText(null);
-        dialog.setContentText(messaggio);
-        Optional<String> result = dialog.showAndWait();
-        return result.orElse(null);
+    // --- POP-UP UTILS ---
+    private void mostraAvviso(String titolo, String messaggio) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(titolo);
+        alert.setHeaderText(null);
+        alert.setContentText(messaggio);
+        alert.showAndWait();
     }
 
     public boolean mostraConfermaScelta(String titolo, String messaggio) {

@@ -10,7 +10,7 @@ public class CartaBoss extends CartaMostro {
     private String nome;
     private String regoleSpeciali;
 
-    public CartaBoss(String nome, String descrizione, String imagePath, String regoleSpeciali, List<Simbolo> simboliFissi, int danno){
+    public CartaBoss(String nome, String descrizione, String regoleSpeciali, String imagePath, List<Simbolo> simboliFissi, int danno){
         super(descrizione, imagePath, simboliFissi, danno);
         this.nome = nome;
         this.regoleSpeciali = regoleSpeciali;
@@ -20,6 +20,11 @@ public class CartaBoss extends CartaMostro {
         return nome;
     }
     public String getRegoleSpeciali(){ return regoleSpeciali; }
+
+    @Override
+    public String getImagePath() {
+        return super.getImagePath();
+    }
 
     // Hook 1: Effetto che scatta all'inizio dello scontro (es. L'Oscuro)
     public void applicaEffettoInizioScontro(Personaggio personaggio) {}
