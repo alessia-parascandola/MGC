@@ -135,6 +135,14 @@ public class GiocoController {
             caricaImmagineSuView(imgCartaScoperta, cartaCapitoloCorrente.getImagePath());
         }
 
+        // Se stiamo scoprendo il Boss (l'ultima carta), il mazzo backend scade subito
+        if (indiceCapitolo == carteCapitoloEstratte.size()) {
+            if (imgMazzoCassero != null) {
+                imgMazzoCassero.setImage(null);
+                imgMazzoCassero.setVisible(false);
+            }
+        }
+
         indiceCapitolo++;
         aggiornaDorsoMazzo();
     }
@@ -237,16 +245,20 @@ public class GiocoController {
     private void aggiornaDorsoMazzo() {
         if (imgMazzoCassero == null) return;
 
-        String percorsoDorso;
         if (indiceCapitolo == 0) {
-            percorsoDorso = "/images/retro_cartaIntro.png";
-        } else if (indiceCapitolo < 16) {
-            percorsoDorso = "/images/dorso_carteCapitolo.png";
-        } else {
-            percorsoDorso = "/images/dorso_boss.jpg";
+            caricaImmagineSuView(imgMazzoCassero, "/images/retro_cartaIntro.png");
+        } else if (indiceCapitolo <= 15) {
+            caricaImmagineSuView(imgMazzoCassero, "/images/dorso_carteCapitolo.png");
+        } else if (indiceCapitolo == 16){
+            // Al capitolo 16 il mazzo mostra il dorso del Boss ed è cliccabile
+            caricaImmagineSuView(imgMazzoCassero, "/images/dorso_boss.jpg");
+            imgMazzoCassero.setVisible(true);
         }
-
-        caricaImmagineSuView(imgMazzoCassero, percorsoDorso);
+        else  {
+            // Quando si raggiunge il Boss (capitolo 16), il mazzo coperto scompare!
+            imgMazzoCassero.setImage(null);
+            imgMazzoCassero.setVisible(false);
+        }
     }
 
     /**

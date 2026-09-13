@@ -28,7 +28,7 @@
             <ColorAdjust brightness="-0.24" />
          </effect>
       </ImageView>
-      <Label fx:id="lblHP" layoutX="81.0" layoutY="342.0" prefHeight="67.0" prefWidth="185.0" text="HP: 35/35" textFill="WHITE">
+      <Label fx:id="lblHP" layoutX="81.0" layoutY="266.0" prefHeight="67.0" prefWidth="185.0" text="HP: 35/35" textFill="WHITE">
          <font>
             <Font name="Georgia" size="28.0" />
          </font>
@@ -36,7 +36,7 @@
             <DropShadow radius="32.81" spread="0.84" width="112.24" />
          </effect>
       </Label>
-      <HBox fx:id="containerMano" layoutX="108.0" layoutY="447.0" prefHeight="167.0" prefWidth="200.0" />
+      <HBox fx:id="containerMano" layoutX="43.0" layoutY="382.0" prefHeight="278.0" prefWidth="348.0" />
       <ImageView fx:id="imgMazzoCassero" fitHeight="441.0" fitWidth="330.0" layoutX="436.0" layoutY="128.0" onMouseClicked="#handlePescaCartaCassero" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/retro_cartaIntro.png" />
@@ -67,7 +67,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="imgPersonaggio" fitHeight="330.0" fitWidth="244.0" layoutX="50.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgPersonaggio" fitHeight="228.0" fitWidth="168.0" layoutX="88.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
          <effect>
             <DropShadow height="28.02" radius="13.51" spread="0.07" width="28.02" />
          </effect>
