@@ -226,6 +226,28 @@ public class GiocoController {
             if (haScudoDado) {
                 mostraAvviso("Attacco Parato!", "Il doppio simbolo/scudo sul dado ha parato completamente l'attacco!");
             } else {
+                Oggetto pozioneTrovata = null;
+                if (personaggioGiocatore.getInventario() != null && personaggioGiocatore.getInventario().getOggetti() != null) {
+                    for (Oggetto obj : personaggioGiocatore.getInventario().getOggetti()) {
+                        if (obj.getNome() != null && obj.getNome().toLowerCase().contains("pozione")) {
+                            pozioneTrovata = obj;
+                            break;
+                        }
+                    }
+                }
+
+                if (pozioneTrovata != null) {
+                    // Sfrutta il metodo chiediConfermaPopup che hai già in fondo al controller
+                    boolean usaPozione = chiediConfermaPopup("Usa Pozione", "Vuoi utilizzare la pozione per evitare di subire i danni?");
+                    if (usaPozione) {
+                        // Rimuove la pozione dall'inventario
+                        personaggioGiocatore.getInventario().getOggetti().remove(pozioneTrovata);
+                        aggiornaGraficaMani(); // Ridisegna l'HBox rimuovendo l'icona
+                        mostraAvviso("Pozione Usata", "Hai bevuto la pozione e evitato i danni del mostro!");
+                        return; // Interrompe il metodo: il danno non viene applicato!
+                    }
+                }
+
                 int riduzioneScudo = 0;
                 for (Oggetto obj : personaggioGiocatore.getInventario().getOggetti()) {
                     if (obj.getNome().toLowerCase().contains("scudo")) {
