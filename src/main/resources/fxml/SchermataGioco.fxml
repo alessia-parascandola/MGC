@@ -57,7 +57,7 @@
          </effect>
       </ImageView>
       <HBox fx:id="containerDadiMostro" alignment="CENTER" layoutX="726.0" layoutY="570.0" prefHeight="106.0" prefWidth="375.0" />
-      <ImageView fx:id="imgMazzoOggetti" fitHeight="246.0" fitWidth="200.0" layoutX="1060.0" layoutY="221.0" onMouseClicked="#handlePescaOggetto" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgMazzoOggetti" fitHeight="246.0" fitWidth="200.0" layoutX="1060.0" layoutY="221.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/dorso_oggetto.png" />
          </image>
@@ -65,7 +65,7 @@
             <DropShadow height="226.87" radius="98.89750000000001" width="170.72" />
          </effect>
          <cursor>
-            <Cursor fx:constant="HAND" />
+            <Cursor fx:constant="DEFAULT" />
          </cursor>
       </ImageView>
       <ImageView fx:id="imgPersonaggio" fitHeight="228.0" fitWidth="168.0" layoutX="88.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">

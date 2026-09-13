@@ -34,6 +34,7 @@ public class GiocoController {
     @FXML private HBox containerDadiMostro;
     @FXML private Label lblHpPersonaggio;
     @FXML private Label lblNomePersonaggio;
+    @FXML private HBox containerMano;
 
     private Personaggio personaggioGiocatore;
     private Cassero cassero;
@@ -45,7 +46,8 @@ public class GiocoController {
 
     @FXML
     public void initialize() {
-        caricaImmagineSuView(imgMazzoCoperto, "/images/carte/dorso_intro.png");
+        // Caso 1: All'avvio mostra il dorso della carta Intro
+        caricaImmagineSuView(imgMazzoCoperto, "/images/retro_cartaIntro.png");
     }
 
     public void setPersonaggio(Personaggio personaggio) {
@@ -116,14 +118,38 @@ public class GiocoController {
                 boss.generaSimboliVita(new DadoCapitolo(), 1);
             }
             aggiornaGraficaDadiMostro(boss.getTracciatoSimboli());
-        } else if (cartaCapitoloCorrente instanceof CartaEvento) {
+        } else if (cartaCapitoloCorrente instanceof CartaEvento evento) {
             svuotaDadiMostro();
-            mostraAvviso("Carta Evento", "Hai incontrato una carta Evento.");
+
+            // Creiamo un pop-up di scelta con due pulsanti (es. Opzione 1 / Opzione 2 o Sì / No)
+            javafx.scene.control.Alert alertScelta = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
+            alertScelta.setTitle("Scelta Evento");
+            alertScelta.setHeaderText("Decisione richiesta");
+            alertScelta.setContentText(cartaCapitoloCorrente.getDescrizione() + "\n\nScegli un'opzione:");
+
+            javafx.scene.control.ButtonType btnSi = new javafx.scene.control.ButtonType("Sì");
+            javafx.scene.control.ButtonType btnNo = new javafx.scene.control.ButtonType("No");
+
+            alertScelta.getButtonTypes().setAll(btnSi, btnNo);
+
+            java.util.Optional<javafx.scene.control.ButtonType> risultato = alertScelta.showAndWait();
+            boolean sceltaUtente = (risultato.isPresent() && risultato.get() == btnSi);
+
+            // Passiamo la scelta al backend (se il metodo accetta un booleano o un parametro di scelta)
+            // Se l'evento del backend richiede una gestione particolare basata su sceltaUtente, puoi passarla qui:
+            // evento.eseguiConScelta(personaggioGiocatore, mazzoOggetti, sceltaUtente);
+
+            // Per ora richiamiamo l'esecuzione standard o passiamo la gestione:
+            evento.esegui(personaggioGiocatore, mazzoOggetti);
+
+            aggiornaGraficaPersonaggio();
+            aggiornaGraficaMani();
         } else {
             svuotaDadiMostro();
             if (cartaCapitoloCorrente != null) {
                 cartaCapitoloCorrente.esegui(personaggioGiocatore, mazzoOggetti);
                 aggiornaGraficaPersonaggio();
+                aggiornaGraficaMani(); // <--- FONDAMENTALE: Aggiorna le mani anche per le carte normali/oggetti
             }
         }
     }
@@ -134,10 +160,12 @@ public class GiocoController {
             return;
         }
 
+        // Se è rimasta 1 sola carta, mostra il dorso del Boss
         if (cassero.carteRimanenti() == 1) {
-            caricaImmagineSuView(imgMazzoCoperto, "/images/carte/dorso_boss.png");
+            caricaImmagineSuView(imgMazzoCoperto, "/images/dorso_boss.jpg");
         } else {
-            caricaImmagineSuView(imgMazzoCoperto, "/images/carte/dorso_capitolo.png");
+            // Per tutte le altre carte capitolo
+            caricaImmagineSuView(imgMazzoCoperto, "/images/dorso_carteCapitolo.png");
         }
     }
 
@@ -176,7 +204,17 @@ public class GiocoController {
             aggiornaGraficaDadiMostro(mostro.getTracciatoSimboli());
 
             if (mostro.eSconfitto()) {
-                mostraAvviso("Vittoria!", "Hai sconfitto il mostro! Ora puoi avanzare.");
+                // Pesca automatica dell'oggetto a fine combattimento tramite il backend
+                if (mazzoOggetti != null && personaggioGiocatore != null) {
+                    Oggetto ricompensa = mazzoOggetti.pesca();
+                    if (ricompensa != null) {
+                        boolean aggiunto = personaggioGiocatore.getInventario().aggiungi(ricompensa);
+                        if (aggiunto) {
+                            aggiornaGraficaMani(); // <--- FONDAMENTALE PER AGGIORNARE LE MANI A SCHERMO
+                            mostraAvviso("Vittoria e Ricompensa!", "Hai ottenuto: " + ricompensa.getNome());
+                        }
+                    }
+                }
                 svuotaDadiMostro();
             } else {
                 mostraAvviso("Colpo a segno!", "Hai colpito il mostro! Un simbolo è stato eliminato.");
@@ -220,7 +258,7 @@ public class GiocoController {
 
     @FXML
     private void handlePescaOggetto(Event event) {
-        mostraAvviso("Mazzo Oggetti", "Gestione oggetti.");
+        // Disabilitato momentaneamente
     }
 
     @FXML
@@ -286,6 +324,47 @@ public class GiocoController {
         }
     }
 
+    private void aggiornaGraficaMani() {
+        javafx.application.Platform.runLater(() -> {
+            if (containerMano == null) return;
+
+            containerMano.getChildren().clear(); // Pulisce la grafica precedente
+
+            if (personaggioGiocatore == null || personaggioGiocatore.getInventario() == null) return;
+
+            List<Oggetto> oggettiInMano = personaggioGiocatore.getInventario().getOggetti();
+            if (oggettiInMano == null || oggettiInMano.isEmpty()) return;
+
+            for (Oggetto obj : oggettiInMano) {
+                ImageView imgOggetto = new ImageView();
+
+                String path = obj.getImagePath();
+                if (path != null) {
+                    if (!path.startsWith("/")) {
+                        path = "/" + path;
+                    }
+                    try {
+                        InputStream is = getClass().getResourceAsStream(path);
+                        if (is != null) {
+                            imgOggetto.setImage(new Image(is));
+                            // Imposta le dimensioni della miniatura dell'oggetto nell'HBox
+                            imgOggetto.setFitWidth(170);
+                            imgOggetto.setFitHeight(240);
+                            imgOggetto.setPreserveRatio(true);
+
+                            containerMano.getChildren().add(imgOggetto);
+                            System.out.println("SUCCESSO: Oggetto aggiunto a containerMano -> " + obj.getNome());
+                        } else {
+                            System.err.println("ERRORE: Immagine oggetto non trovata -> " + path);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("ECCEZIONE caricamento oggetto: " + path);
+                    }
+                }
+            }
+        });
+    }
+
     private void caricaImmagineSuView(ImageView imageView, String resourcePath) {
         if (imageView == null || resourcePath == null) return;
         try {
@@ -306,5 +385,19 @@ public class GiocoController {
         alert.setHeaderText(null);
         alert.setContentText(messaggio);
         alert.showAndWait();
+    }
+
+    private boolean chiediConfermaPopup(String titolo, String messaggio) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(titolo);
+        alert.setHeaderText(null);
+        alert.setContentText(messaggio);
+
+        javafx.scene.control.ButtonType btnSi = new javafx.scene.control.ButtonType("Sì");
+        javafx.scene.control.ButtonType btnNo = new javafx.scene.control.ButtonType("No");
+        alert.getButtonTypes().setAll(btnSi, btnNo);
+
+        java.util.Optional<javafx.scene.control.ButtonType> ris = alert.showAndWait();
+        return ris.isPresent() && ris.get() == btnSi;
     }
 }
