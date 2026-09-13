@@ -6,8 +6,9 @@ public class FacciaDado {
     // "private" su usa di default sugli attributi delle classi concrete normali per proteggere lo stato interno
     private final List<Simbolo> simboli;
     private final boolean scudo;
+    private String imagePath;
 
-    public FacciaDado(List<Simbolo> simboli, boolean scudo){
+    public FacciaDado(List<Simbolo> simboli, boolean scudo, String imagePath){
         //Vincolo 1: la lista deve contenere 1 o 2 simboli
         if (simboli == null || simboli.isEmpty() || simboli.size() >2){
             throw new IllegalArgumentException("Una faccia deve contenere 1 o 2 simboli!");
@@ -20,6 +21,7 @@ public class FacciaDado {
 
         this.simboli = new java.util.ArrayList<>(simboli);
         this.scudo = scudo;
+        this.imagePath = imagePath;
     }
 
     public List<Simbolo> getSimboli(){
@@ -29,6 +31,8 @@ public class FacciaDado {
     public boolean haScudo(){
         return scudo;
     }
+
+    public String getImagePath(){ return imagePath; }
 
     // Restituisce il simbolo primario presente sulla faccia
     public Simbolo getSimboloPrincipale() {
