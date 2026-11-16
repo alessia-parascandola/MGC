@@ -1,0 +1,60 @@
+# Inventario delle dichiarazioni
+
+Generato dai sorgenti: package, tipo e gerarchia sono definiti nel file indicato.
+
+- `Cassero`: `public class Cassero`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\Cassero.java`.
+- `GestoreCombattimento`: `public class GestoreCombattimento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\GestoreCombattimento.java`.
+- `GestorePartita`: `public class GestorePartita`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\GestorePartita.java`.
+- `Interazione`: `public interface Interazione`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\Interazione.java`.
+- `Interazioni`: `public final class Interazioni`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\Interazioni.java`.
+- `Main`: `public class Main`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\Main.java`.
+- `StoricoPartite`: `public final class StoricoPartite`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\StoricoPartite.java`.
+- `CartaCapitolo`: `public abstract class CartaCapitolo`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\CartaCapitolo.java`.
+- `CartaIntro`: `public class CartaIntro extends CartaCapitolo`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\CartaIntro.java`.
+- `CartaMostro`: `public class CartaMostro extends CartaCapitolo`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\CartaMostro.java`.
+- `MazzoCapitoli`: `public class MazzoCapitoli`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\MazzoCapitoli.java`.
+- `CartaBoss`: `public class CartaBoss extends CartaMostro`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Boss\CartaBoss.java`.
+- `LOscuro`: `public class LOscuro extends CartaBoss`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Boss\LOscuro.java`.
+- `Mutaforma`: `public class Mutaforma extends CartaBoss`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Boss\Mutaforma.java`.
+- `SacerdotessaFolle`: `public class SacerdotessaFolle extends CartaBoss`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Boss\SacerdotessaFolle.java`.
+- `SignoreDelleTenebre`: `public class SignoreDelleTenebre extends CartaBoss`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Boss\SignoreDelleTenebre.java`.
+- `TerroreDelSottosuolo`: `public class TerroreDelSottosuolo extends CartaBoss`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Boss\TerroreDelSottosuolo.java`.
+- `CartaEvento`: `public abstract class CartaEvento extends CartaCapitolo`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\CartaEvento.java`.
+- `CavernaAllagata`: `public class CavernaAllagata extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\CavernaAllagata.java`.
+- `EventoBarattoUomoNascosto`: `public class EventoBarattoUomoNascosto extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoBarattoUomoNascosto.java`.
+- `EventoIntriganteStraniero`: `public class EventoIntriganteStraniero extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoIntriganteStraniero.java`.
+- `EventoLameOscillanti`: `public class EventoLameOscillanti extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoLameOscillanti.java`.
+- `EventoPioggiaAcido`: `public class EventoPioggiaAcido extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoPioggiaAcido.java`.
+- `EventoRicompensaDiretta`: `public class EventoRicompensaDiretta extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoRicompensaDiretta.java`.
+- `EventoStanzaDelTorturatore`: `public class EventoStanzaDelTorturatore extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoStanzaDelTorturatore.java`.
+- `EventoStormoDiPipistrelli`: `public class EventoStormoDiPipistrelli extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoStormoDiPipistrelli.java`.
+- `EventoTorreCampanaria`: `public class EventoTorreCampanaria extends CartaEvento`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\carte\Eventi\EventoTorreCampanaria.java`.
+- `Dado`: `public abstract class Dado<T>`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\dadi\Dado.java`.
+- `DadoCapitolo`: `public class DadoCapitolo extends Dado<Simbolo>`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\dadi\DadoCapitolo.java`.
+- `DadoPersonaggio`: `public class DadoPersonaggio extends Dado<FacciaDado>`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\dadi\DadoPersonaggio.java`.
+- `FacciaDado`: `public class FacciaDado`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\dadi\FacciaDado.java`.
+- `Simbolo`: `public enum Simbolo`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\dadi\Simbolo.java`.
+- `AppGUI`: `public class AppGUI extends Application`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\gui\AppGUI.java`.
+- `GiocoController`: `public class GiocoController`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\gui\GiocoController.java`.
+- `InterazioneGrafica`: ``. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\gui\InterazioneGrafica.java`.
+- `MainGUI`: `public class MainGUI`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\gui\MainGUI.java`.
+- `MenuController`: `public class MenuController`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\gui\MenuController.java`.
+- `SelezionePersonaggioController`: `public class SelezionePersonaggioController`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\gui\SelezionePersonaggioController.java`.
+- `Arma`: `public class Arma extends Oggetto`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\Arma.java`.
+- `Cibo`: `public class Cibo extends Oggetto`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\Cibo.java`.
+- `Inventario`: `public class Inventario`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\Inventario.java`.
+- `MazzoOggetti`: `public class MazzoOggetti`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\MazzoOggetti.java`.
+- `Oggetto`: `public abstract class Oggetto`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\Oggetto.java`.
+- `Scudo`: `public class Scudo extends Oggetto`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\Scudo.java`.
+- `Pozione`: `public abstract class Pozione extends Oggetto`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\pozioni\Pozione.java`.
+- `PozioneEvasione`: `public class PozioneEvasione extends Pozione`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\pozioni\PozioneEvasione.java`.
+- `PozioneFortuna`: `public class PozioneFortuna extends Pozione`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\pozioni\PozioneFortuna.java`.
+- `PozioneIntuizione`: `public class PozioneIntuizione extends Pozione`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\pozioni\PozioneIntuizione.java`.
+- `PozioneSimbolo`: `public class PozioneSimbolo extends Pozione`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\pozioni\PozioneSimbolo.java`.
+- `FrammentoDellaFuria`: `public class FrammentoDellaFuria extends Reliquia`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\reliquie\FrammentoDellaFuria.java`.
+- `PietreDellaDuplicazione`: `public class PietreDellaDuplicazione extends Reliquia`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\reliquie\PietreDellaDuplicazione.java`.
+- `Reliquia`: `public abstract class Reliquia extends Oggetto`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\reliquie\Reliquia.java`.
+- `RunaDiRengorn`: `public class RunaDiRengorn extends Reliquia`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\reliquie\RunaDiRengorn.java`.
+- `VersettiCurativi`: `public class VersettiCurativi extends Reliquia`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\oggetti\reliquie\VersettiCurativi.java`.
+- `Personaggio`: `public class Personaggio`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\personaggi\Personaggio.java`.
+- `PersonaggioFactory`: `public class PersonaggioFactory`. Percorso: `src\main\java\it\unicam\cs\mpgc\rpg126692\personaggi\PersonaggioFactory.java`.
