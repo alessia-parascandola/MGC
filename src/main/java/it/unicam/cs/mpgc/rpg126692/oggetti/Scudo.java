@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
@@ -13,7 +14,7 @@ public class Scudo extends Oggetto {
 
     @Override
     public void usa(Personaggio utilizzatore, CartaMostro mostro) {
-        System.out.println(getNome() + " è equipaggiato. Riduce automaticamente i danni subiti!");
+        Interazioni.corrente().println(getNome() + " è equipaggiato. Riduce automaticamente i danni subiti!");
     }
 
     public int getRiduzioneDanno(){

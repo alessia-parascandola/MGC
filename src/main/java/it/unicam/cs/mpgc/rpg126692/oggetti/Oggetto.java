@@ -18,6 +18,7 @@ public abstract class Oggetto {
     // Gli passiamo il Personaggio che lo usa (e la CartaMostro se serve per le armi)
     public abstract void usa(Personaggio utilizzatore, CartaMostro mostro);
 
+    @Override public String toString() { return nome + " - " + descrizione; }
     // Getter
     public String getNome(){
         return nome;

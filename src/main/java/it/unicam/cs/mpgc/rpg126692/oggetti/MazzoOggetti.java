@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 import it.unicam.cs.mpgc.rpg126692.oggetti.pozioni.PozioneEvasione;
@@ -30,15 +31,15 @@ public class MazzoOggetti {
         carte.add(new Cibo("Formaggio verminoso", "Formaggio forte. Cura 1 HP.", "/images/oggetti/formaggio.png", 1));
 
         // --- Armi ---
-        carte.add(new Arma("Lama deteriorata", "Rilancia il dado se esce SAGGEZZA.", "/images/oggetti/lama.png", 1, Simbolo.SAGGEZZA, false));
-        carte.add(new Arma("Randello deformato", "Rilancia il dado se esce FORZA.", "/images/oggetti/randello.png", 1, Simbolo.FORZA, false));
-        carte.add(new Arma("Flagello arrugginito", "Rilancia il dado se esce ASTUZIA.", "/images/oggetti/flagello.png", 1, Simbolo.ASTUZIA, false));
+        carte.add(new Arma("Lama deteriorata", "Se esce SAPIENZA, puoi rilanciare il dado e scegliere quale dei due risultati applicare.", "/images/oggetti/lama.png", 1, Simbolo.SAPIENZA, false));
+        carte.add(new Arma("Randello deformato", "Se esce POSSANZA, puoi rilanciare il dado e scegliere quale dei due risultati applicare.", "/images/oggetti/randello.png", 1, Simbolo.POSSANZA, false));
+        carte.add(new Arma("Flagello arrugginito", "Se esce ASTUZIA, puoi rilanciare il dado e scegliere quale dei due risultati applicare.", "/images/oggetti/flagello.png", 1, Simbolo.ASTUZIA, false));
         carte.add(new Arma("Ascia bipenne", "Occupazione: 2 mani. Lanci un Dado Capitolo extra ad ogni attacco.", "/images/oggetti/ascia.png", 2, null, true));
 
         // --- Pozioni ---
-        carte.add(new PozioneSimbolo("Distillato di sapienza","Scarta per ottenere un risultato SAGGEZZA.", "/images/oggetti/distillato.png", Simbolo.SAGGEZZA));
+        carte.add(new PozioneSimbolo("Distillato di sapienza","Scarta per ottenere un risultato SAPIENZA.", "/images/oggetti/distillato.png", Simbolo.SAPIENZA));
         carte.add(new PozioneSimbolo("Mistura dell'astuzia", "Scarta per ottenere un risultato in ASTUZIA.", "/images/oggetti/mistura.png", Simbolo.ASTUZIA));
-        carte.add(new PozioneSimbolo("Infuso della possanza", "Scarta per ottenere un risultato in FORZA.", "/images/oggetti/infuso.png", Simbolo.FORZA));
+        carte.add(new PozioneSimbolo("Infuso della possanza", "Scarta per ottenere un risultato in POSSANZA.", "/images/oggetti/infuso.png", Simbolo.POSSANZA));
         carte.add(new PozioneEvasione("Evasione effervecente", "Scarta per non perdere HP.", "/images/oggetti/evasione.png"));
         carte.add(new PozioneEvasione("Evasione effervecente", "Scarta per non perdere HP.", "/images/oggetti/evasione.png"));
         carte.add(new PozioneEvasione("Evasione effervecente", "Scarta per non perdere HP.", "/images/oggetti/evasione.png"));
@@ -58,9 +59,9 @@ public class MazzoOggetti {
 
         // --- Reliquie ---
         carte.add(new VersettiCurativi("Versetti curativi", "Quando ottieni un risultato doppio con un dado, puoi dare un punto vita a qualsiasi personaggio.", "/images/oggetti/versetti.jpg"));
-        carte.add(new FrammentoDellaFuria("Frammento della furia", "Una volta per turno di combattimento, quando ottieni un doppio con un dado, puoi tirarlo ancora e applicare entrambi i risultati.", "/images/oggetti/frammento.png"));
-        carte.add(new PietreDellaDuplicazione("Pietre della duplicazione", "Quando ottieni un risultato singolo con un dado, questo vale come due singoli di quella caratteristica.", "/images/oggetti/pietre.png"));
-        carte.add(new RunaDiRengorn("Runa di Rengorn","Quando ottieni un risultato doppio con un dado, puoi cambiarlo in un qualsiasi risultato singolo.", "/images/oggetti/runa.png"));
+        carte.add(new FrammentoDellaFuria("Frammento della furia", "Una volta per turno di combattimento, quando ottieni un doppio con un dado, puoi tirarlo ancora e applicare entrambi i risultati.", "/images/oggetti/frammento.jpg"));
+        carte.add(new PietreDellaDuplicazione("Pietre della duplicazione", "Quando ottieni un risultato singolo con un dado, questo vale come due singoli di quella caratteristica.", "/images/oggetti/pietre.jpg"));
+        carte.add(new RunaDiRengorn("Runa di Rengorn","Quando ottieni un risultato doppio con un dado, puoi cambiarlo in un qualsiasi risultato singolo.", "/images/oggetti/runa.jpg"));
 
         // Mescoliamo il mazzo all'inizio del gioco
         Collections.shuffle(carte);
@@ -71,7 +72,7 @@ public class MazzoOggetti {
         if (!carte.isEmpty()) {
             return carte.remove(0);     // Rimuove e restituisce la prima carta
         }
-        System.out.println("Gli oggetti sono finiti!");
+        Interazioni.corrente().println("Gli oggetti sono finiti!");
         return null;
     }
 

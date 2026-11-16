@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.carte.Eventi;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.GestorePartita;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
@@ -17,23 +18,23 @@ public class EventoRicompensaDiretta extends CartaEvento {
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
-        System.out.println(getDescrizione());
+        Interazioni.corrente().println(getDescrizione());
 
         // 1. Danno immediato (se presente)
         if (dannoSubito > 0) {
-            // System.out.println("Subisci " + dannoSubito + " HP di danno!");
+            // Interazioni.corrente().println("Subisci " + dannoSubito + " HP di danno!");
             personaggio.subisciDanno(dannoSubito, false, false);
         }
 
         for (int i = 0; i < quantitaOggetti; i++) {
             if (!mazzoOggetti.isVuoto()) {
                 Oggetto nuovo = mazzoOggetti.pesca();;
-                System.out.println("\nHai trovato: " + nuovo.getNome() + " - " + nuovo.getDescrizione());
+                Interazioni.corrente().println("\nHai trovato: " + nuovo.getNome() + " - " + nuovo.getDescrizione());
 
                 // Richiama la gestione inventario centralizzata di GestorePartita
                 GestorePartita.gestisciAcquisizioneOggetto(personaggio, nuovo);
             } else {
-                System.out.println("\nIl mazzo degli oggetti è vuoto!");
+                Interazioni.corrente().println("\nIl mazzo degli oggetti è vuoto!");
                 break;
             }
         }

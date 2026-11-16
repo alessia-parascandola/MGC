@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.PietreDellaDuplicazione;
 
@@ -39,10 +40,10 @@ public class Inventario {
     public boolean aggiungi(Oggetto nuovoOggetto) {
         if (puoContenere(nuovoOggetto)) {
             oggetti.add(nuovoOggetto);
-            System.out.println(nuovoOggetto.getNome() + " aggiunto all'inventario!");
+            Interazioni.corrente().println(nuovoOggetto.getNome() + " aggiunto all'inventario!");
             return true;
         } else {
-            System.out.println("Non hai abbastanza mani libere per impugnare " + nuovoOggetto.getNome() + "!");
+            Interazioni.corrente().println("Non hai abbastanza mani libere per impugnare " + nuovoOggetto.getNome() + "!");
             return false;
         }
     }
@@ -51,7 +52,7 @@ public class Inventario {
     public Oggetto scarta(int indice) {
         if (indice >= 0 && indice < oggetti.size()) {
             Oggetto rimossa = oggetti.remove(indice);
-            System.out.println("Hai scartato: " + rimossa.getNome());
+            Interazioni.corrente().println("Hai scartato: " + rimossa.getNome());
             return rimossa;
         }
         return null;
@@ -59,12 +60,12 @@ public class Inventario {
 
     // Mostra il contenuto delle mani in console
     public void mostra() {
-        System.out.println("\n--- INVENTARIO (" + getManiOccupate() + "/" + MAX_MANI + " Mani Occupate) ---");
+        Interazioni.corrente().println("\n--- INVENTARIO (" + getManiOccupate() + "/" + MAX_MANI + " Mani Occupate) ---");
         if (oggetti.isEmpty()) {
-            System.out.println("Nessun oggetto in mano.");
+            Interazioni.corrente().println("Nessun oggetto in mano.");
         } else {
             for (int i = 0; i < oggetti.size(); i++) {
-                System.out.println((i + 1) + ". " + oggetti.get(i).getNome() + " - " + oggetti.get(i).getDescrizione());
+                Interazioni.corrente().println((i + 1) + ". " + oggetti.get(i).getNome() + " - " + oggetti.get(i).getDescrizione());
             }
         }
     }
@@ -90,11 +91,11 @@ public class Inventario {
 
     public void svuotaInventario() {
         if (oggetti.isEmpty()){
-            System.out.println("Non hai nulla nelle mani.");
+            Interazioni.corrente().println("Non hai nulla nelle mani.");
         }
         else {
             oggetti.clear();
-            System.out.println("Tutti gli oggetti nelle tue mani sono stati scartati!");
+            Interazioni.corrente().println("Tutti gli oggetti nelle tue mani sono stati scartati!");
         }
     }
 

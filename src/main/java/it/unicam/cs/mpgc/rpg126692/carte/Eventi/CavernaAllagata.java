@@ -4,7 +4,8 @@ import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 import java.util.List;
-import java.util.Scanner;
+import it.unicam.cs.mpgc.rpg126692.Interazione;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 public class CavernaAllagata extends CartaEvento{
 
@@ -18,36 +19,36 @@ public class CavernaAllagata extends CartaEvento{
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
-        System.out.println("\n--- EVENTO: CAVERNA ALLAGATA ---");
-        System.out.println(getDescrizione());
+        Interazioni.corrente().println("\n--- EVENTO: CAVERNA ALLAGATA ---");
+        Interazioni.corrente().println(getDescrizione());
 
-        Scanner scanner = new Scanner(System.in);
+        Interazione Interazione = Interazioni.corrente();
         boolean superato = false;
 
         for (int tentativo = 1; tentativo <= 3; tentativo++) {
             if (personaggio.isSconfitto()) break;
 
-            System.out.println("\n[Tentativo " + tentativo + "/3 - Premi INVIO per lanciare il dado e cercare un DOPPIO...]");
-            scanner.nextLine();
+            Interazioni.corrente().println("\n[Tentativo " + tentativo + "/3 - Premi INVIO per lanciare il dado e cercare un DOPPIO...]");
+            Interazione.nextLine();
 
             FacciaDado faccia = personaggio.lanciaDado();
             boolean eDoppio = faccia.isDoppio();
 
-            System.out.println("Esito lancio: " + faccia.getSimboloPrincipale() + (eDoppio ? " (DOPPIO!)" : ""));
+            Interazioni.corrente().println("Esito lancio: " + faccia.descrivi());
 
             if (eDoppio) {
-                System.out.println("SUCCESSO: Riesci a trovare un varco e riemergi dall'altra parte!");
+                Interazioni.corrente().println("SUCCESSO: Riesci a trovare un varco e riemergi dall'altra parte!");
                 superato = true;
                 break;
             } else {
-                System.out.println("Inizi ad annegare! Perdi 1 HP.");
+                Interazioni.corrente().println("Inizi ad annegare! Perdi 1 HP.");
                 personaggio.subisciDanno(1, false, false);
-                System.out.println("HP Attuali: [" + personaggio.getHP() + "/18]");
+                Interazioni.corrente().println("HP Attuali: [" + personaggio.getHP() + "/" + personaggio.getSaluteMassima() + "]");
             }
         }
 
         if (!superato && !personaggio.isSconfitto()) {
-            System.out.println("\nDopo 3 tentativi falliti, riesci trascinandoti a riemergere esausto e senza fiato.");
+            Interazioni.corrente().println("\nDopo 3 tentativi falliti, riesci trascinandoti a riemergere esausto e senza fiato.");
         }
     }
 }

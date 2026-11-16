@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti.pozioni;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
@@ -17,13 +18,13 @@ public class PozioneSimbolo extends Pozione {
         if (mostro != null && !mostro.getTracciatoSimboli().isEmpty()) {
             if (mostro.getTracciatoSimboli().contains(simboloOttenuto)) {
                 mostro.getTracciatoSimboli().remove(simboloOttenuto);
-                System.out.println("Usi " + getNome() + "! Ottieni 1 " + simboloOttenuto + " e completi un simbolo del mostro!");
+                Interazioni.corrente().println("Usi " + getNome() + "! Ottieni 1 " + simboloOttenuto + " e completi un simbolo del mostro!");
                 super.usa(utilizzatore, mostro); // La scarta
             } else {
-                System.out.println("Il mostro non ha il simbolo " + simboloOttenuto + " nel suo tracciato!");
+                Interazioni.corrente().println("Il mostro non ha il simbolo " + simboloOttenuto + " nel suo tracciato!");
             }
         } else {
-            System.out.println("Puoi usare questa pozione solo durante un combattimento o una prova!");
+            Interazioni.corrente().println("Puoi usare questa pozione solo durante un combattimento o una prova!");
         }
     }
 }

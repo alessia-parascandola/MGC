@@ -4,7 +4,8 @@ import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
-import java.util.Scanner;
+import it.unicam.cs.mpgc.rpg126692.Interazione;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 public class EventoIntriganteStraniero extends CartaEvento{
     public EventoIntriganteStraniero() {
@@ -20,31 +21,32 @@ public class EventoIntriganteStraniero extends CartaEvento{
     // Stampa iniziale del capitolo
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzo) {
-        System.out.println("\n--- EVENTO: L'INTRIGANTE STRANIERO ---");
-        System.out.println(getDescrizione());
+        Interazioni.corrente().println("\n--- EVENTO: L'INTRIGANTE STRANIERO ---");
+        Interazioni.corrente().println(getDescrizione());
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nFai la tua scelta (1 o 2): ");
-        String input = scanner.nextLine().trim();
+        Interazione Interazione = Interazioni.corrente();
+        Interazioni.corrente().print("\nFai la tua scelta (1 o 2): ");
+        String input = Interazione.nextLine().trim();
 
         if (input.equals("1")) {
-            System.out.println("\nBevi un piccolo sorso. L'uomo sorride e ti ricompensa!");
+            Interazioni.corrente().println("\nBevi un piccolo sorso. L'uomo sorride e ti ricompensa!");
             if (!mazzo.isVuoto()) {
                 personaggio.getInventario().aggiungi(mazzo.pesca());
             }
         } else if (input.equals("2")) {
-            System.out.println("\nBevi un lungo sorso! Esegui una prova di FORZA...");
+            Interazioni.corrente().println("\nBevi un lungo sorso! Esegui una prova di POSSANZA...");
             FacciaDado faccia = personaggio.lanciaDado();
+            Interazioni.corrente().println("Esito lancio: " + faccia.descrivi());
 
-            if (faccia.getSimboloPrincipale() == Simbolo.FORZA) {
-                System.out.println("SUCCESSO: L'elisir ti scalda le viscere! Guadagni 3 HP.");
+            if (faccia.getSimboloPrincipale() == Simbolo.POSSANZA) {
+                Interazioni.corrente().println("SUCCESSO: L'elisir ti scalda le viscere! Guadagni 3 HP.");
                 personaggio.cura(3);
             } else {
-                System.out.println("FALLIMENTO: È tossico e pestilenziale! Vomiti e perdi 1 HP.");
+                Interazioni.corrente().println("FALLIMENTO: È tossico e pestilenziale! Vomiti e perdi 1 HP.");
                 personaggio.subisciDanno(1, false, false);
             }
         } else {
-            System.out.println("Tentenni troppo! Lo straniero scontento parte con il suo carro.");
+            Interazioni.corrente().println("Tentenni troppo! Lo straniero scontento parte con il suo carro.");
         }
     }
 }

@@ -13,9 +13,9 @@ public class DadoCapitolo extends Dado<Simbolo>{
         //Passa la lista al costruttore del padre, garantendo che la creazione
         //rispetti tutti i controlli dell classe astratta
         super(List.of(
-                Simbolo.FORZA, Simbolo.FORZA,
+                Simbolo.POSSANZA, Simbolo.POSSANZA,
                 Simbolo.ASTUZIA, Simbolo.ASTUZIA,
-                Simbolo.SAGGEZZA, Simbolo.SAGGEZZA
+                Simbolo.SAPIENZA, Simbolo.SAPIENZA
         ));
     }
 }

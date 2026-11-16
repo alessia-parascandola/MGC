@@ -12,11 +12,11 @@ public class PersonaggioFactory {
     public static Personaggio creaCook(){
         DadoPersonaggio dadoCook = new DadoPersonaggio(List.of(
                 new FacciaDado(List.of(Simbolo.ASTUZIA, Simbolo.ASTUZIA), true, "/images/dadi/doppio_astuzia.png"),
-                new FacciaDado(List.of(Simbolo.FORZA, Simbolo.FORZA), true, "/images/dadi/doppio_forza.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA, Simbolo.POSSANZA), true, "/images/dadi/doppio_possanza.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/astuzia.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/cook_dado.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/cook_dado.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/saggezza.png")
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/cook_dado.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/cook_dado.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/sapienza.png")
         ));
 
         return new Personaggio(35, "Cook", 4, 3, 1, dadoCook, "/images/personaggi/cook.png");
@@ -24,11 +24,11 @@ public class PersonaggioFactory {
 
     public static Personaggio creaAbbot(){
         DadoPersonaggio dadoAbbot = new DadoPersonaggio(List.of(
-                new FacciaDado(List.of(Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), true, "/images/dadi/doppio_saggezza.png"),
-                new FacciaDado(List.of(Simbolo.FORZA, Simbolo.FORZA), true, "/images/dadi/doppio_forza.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/forza.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/abbot_dado.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/abbot_dado.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA, Simbolo.SAPIENZA), true, "/images/dadi/doppio_sapienza.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA, Simbolo.POSSANZA), true, "/images/dadi/doppio_possanza.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/possanza.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/abbot_dado.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/abbot_dado.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/astuzia.png")
         ));
 
@@ -37,12 +37,12 @@ public class PersonaggioFactory {
 
     public static Personaggio creaTailor(){
         DadoPersonaggio dadoTailor = new DadoPersonaggio(List.of(
-                new FacciaDado(List.of(Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), true, "/images/dadi/doppio_saggezza.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA, Simbolo.SAPIENZA), true, "/images/dadi/doppio_sapienza.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA, Simbolo.ASTUZIA), true, "/images/dadi/doppio_astuzia.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/saggezza.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/sapienza.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/tailor_dado.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/tailor_dado.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/forza.png")
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/possanza.png")
         ));
 
         return new Personaggio(35, "Tailor", 1, 4, 3, dadoTailor, "/images/personaggi/tailor.png");
@@ -50,12 +50,12 @@ public class PersonaggioFactory {
 
     public static Personaggio creaMiller(){
         DadoPersonaggio dadoMiller = new DadoPersonaggio(List.of(
-                new FacciaDado(List.of(Simbolo.FORZA, Simbolo.FORZA), true, "/images/dadi/doppio_forza.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA, Simbolo.POSSANZA), true, "/images/dadi/doppio_possanza.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA, Simbolo.ASTUZIA), true, "/images/dadi/doppio_astuzia.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/astuzia.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/miller_dado.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/miller_dado.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/saggezza.png")
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/miller_dado.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/miller_dado.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/sapienza.png")
         ));
 
         return new Personaggio(35, "Miller", 3, 4, 1, dadoMiller, "/images/personaggi/miller.png");
@@ -64,11 +64,11 @@ public class PersonaggioFactory {
     public static Personaggio creaTanner(){
         DadoPersonaggio dadoTanner = new DadoPersonaggio(List.of(
                 new FacciaDado(List.of(Simbolo.ASTUZIA, Simbolo.ASTUZIA), true, "/images/dadi/doppio_astuzia.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), true, "/images/dadi/doppio_saggezza.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA, Simbolo.SAPIENZA), true, "/images/dadi/doppio_sapienza.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/astuzia.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/tanner_dado.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/tanner_dado.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/forza.png")
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/tanner_dado.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/tanner_dado.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/possanza.png")
         ));
 
         return new Personaggio(35, "Tanner", 1, 3, 4, dadoTanner, "/images/personaggi/tanner.png");
@@ -76,11 +76,11 @@ public class PersonaggioFactory {
 
     public static Personaggio creaSmith(){
         DadoPersonaggio dadoSmith = new DadoPersonaggio(List.of(
-                new FacciaDado(List.of(Simbolo.FORZA, Simbolo.FORZA), true, "/images/dadi/doppio_forza.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), true, "/images/dadi/doppio_saggezza.png"),
-                new FacciaDado(List.of(Simbolo.SAGGEZZA), false, "/images/dadi/saggezza.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/smith_dado.png"),
-                new FacciaDado(List.of(Simbolo.FORZA), false, "/images/dadi/smith_dado.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA, Simbolo.POSSANZA), true, "/images/dadi/doppio_possanza.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA, Simbolo.SAPIENZA), true, "/images/dadi/doppio_sapienza.png"),
+                new FacciaDado(List.of(Simbolo.SAPIENZA), false, "/images/dadi/sapienza.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/smith_dado.png"),
+                new FacciaDado(List.of(Simbolo.POSSANZA), false, "/images/dadi/smith_dado.png"),
                 new FacciaDado(List.of(Simbolo.ASTUZIA), false, "/images/dadi/astuzia.png")
         ));
 

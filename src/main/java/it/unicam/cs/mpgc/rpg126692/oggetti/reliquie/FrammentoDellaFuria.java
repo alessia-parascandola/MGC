@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti.reliquie;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
@@ -12,8 +13,8 @@ public class FrammentoDellaFuria extends Reliquia {
 
     @Override
     public void usa(Personaggio utilizzatore, CartaMostro mostro) {
-        System.out.println("Reliquia equipaggiata: " + getNome() + ".");
-        System.out.println("Effetto: Una volta per turno, quando ottieni un doppio, puoi ritirare il dado e applicare entrambi i risultati.");
+        Interazioni.corrente().println("Reliquia equipaggiata: " + getNome() + ".");
+        Interazioni.corrente().println("Effetto: Una volta per turno, quando ottieni un doppio, puoi ritirare il dado e applicare entrambi i risultati.");
     }
 
     public boolean canUsa() {
@@ -22,7 +23,7 @@ public class FrammentoDellaFuria extends Reliquia {
 
     public void attivaEffetto() {
         this.usataInQuestoTurno = true;
-        System.out.println("Effetto Frammento della Furia attivato per questo turno!");
+        Interazioni.corrente().println("Effetto Frammento della Furia attivato per questo turno!");
     }
 
     public void resetTurno() {

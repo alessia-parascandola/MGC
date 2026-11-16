@@ -30,5 +30,17 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        if (!project.hasProperty("guiTest")) excludeTags "gui"
+    }
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+tasks.register('runConsole', JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'it.unicam.cs.mpgc.rpg126692.Main'
+    standardInput = System.in
 }

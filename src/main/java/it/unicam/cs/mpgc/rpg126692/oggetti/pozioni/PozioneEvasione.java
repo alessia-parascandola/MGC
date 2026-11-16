@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti.pozioni;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
@@ -12,7 +13,7 @@ public class PozioneEvasione extends Pozione {
 
     @Override
     public void usa(Personaggio utilizzatore, CartaMostro mostro) {
-        System.out.println("Usi Evasione effervescente! Annulli completamente il danno subìto!");
+        Interazioni.corrente().println("Usi Evasione effervescente! Annulli completamente il danno subìto!");
         super.usa(utilizzatore, mostro);    // Richiama il padre per scartarla dall'inventario
     }
 }

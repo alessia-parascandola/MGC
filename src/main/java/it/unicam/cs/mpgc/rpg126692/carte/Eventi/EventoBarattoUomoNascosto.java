@@ -3,7 +3,8 @@ package it.unicam.cs.mpgc.rpg126692.carte.Eventi;
 import it.unicam.cs.mpgc.rpg126692.dadi.FacciaDado;
 import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
-import java.util.Scanner;
+import it.unicam.cs.mpgc.rpg126692.Interazione;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 public class EventoBarattoUomoNascosto extends CartaEvento{
 
@@ -17,52 +18,53 @@ public class EventoBarattoUomoNascosto extends CartaEvento{
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzo) {
-        System.out.println("\n--- EVENTO: L'UOMO NASCOSTO ---");
-        System.out.println(getDescrizione());
+        Interazioni.corrente().println("\n--- EVENTO: L'UOMO NASCOSTO ---");
+        Interazioni.corrente().println(getDescrizione());
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nFai la tua scelta (1 o 2): ");
-        String input = scanner.nextLine().trim();
+        Interazione Interazione = Interazioni.corrente();
+        Interazioni.corrente().print("\nFai la tua scelta (1 o 2): ");
+        String input = Interazione.nextLine().trim();
 
         if (input.equals("1")) {
             if (personaggio.getInventario().isVuoto()) {
-                System.out.println("Non hai oggetti da barattare! L'uomo scuote la testa e se ne va.");
+                Interazioni.corrente().println("Non hai oggetti da barattare! L'uomo scuote la testa e se ne va.");
                 return;
             }
 
-            System.out.println("\nQuale oggetto vuoi scartare?");
+            Interazioni.corrente().println("\nQuale oggetto vuoi scartare?");
             for (int i = 0; i < personaggio.getInventario().getOggetti().size(); i++) {
-                System.out.println("[" + (i + 1) + "] " + personaggio.getInventario().getOggetti().get(i).getNome());
+                Interazioni.corrente().println("[" + (i + 1) + "] " + personaggio.getInventario().getOggetti().get(i).getNome());
             }
-            System.out.print("> ");
+            Interazioni.corrente().print("> ");
 
             try {
-                int idx = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                int idx = Integer.parseInt(Interazione.nextLine().trim()) - 1;
                 if (idx >= 0 && idx < personaggio.getInventario().getOggetti().size()) {
                     personaggio.getInventario().scarta(idx);
-                    System.out.println("Hai barattato l'oggetto! Peschi 2 nuovi oggetti.");
+                    Interazioni.corrente().println("Hai barattato l'oggetto! Peschi 2 nuovi oggetti.");
                     for (int i = 0; i < 2; i++) {
                         if (!mazzo.isVuoto()) personaggio.getInventario().aggiungi(mazzo.pesca());
                     }
                 } else {
-                    System.out.println("Scelta non valida, l'uomo si spazientisce e se ne va!");
+                    Interazioni.corrente().println("Scelta non valida, l'uomo si spazientisce e se ne va!");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Input non valido! L'evento termina.");
+                Interazioni.corrente().println("Input non valido! L'evento termina.");
             }
 
         } else if (input.equals("2")) {
-            System.out.println("\nTenti di trattare! Fai una prova su DOPPIO...");
+            Interazioni.corrente().println("\nTenti di trattare! Fai una prova su DOPPIO...");
             FacciaDado faccia = personaggio.lanciaDado();
+            Interazioni.corrente().println("Esito lancio: " + faccia.descrivi());
 
             if (faccia.isDoppio()) {
-                System.out.println("SUCCESSO: La tua parlantina ti premia! Peschi 1 Oggetto.");
+                Interazioni.corrente().println("SUCCESSO: La tua parlantina ti premia! Peschi 1 Oggetto.");
                 if (!mazzo.isVuoto()) personaggio.getInventario().aggiungi(mazzo.pesca());
             } else {
-                System.out.println("FALLIMENTO: Il tuo tentativo è inutile, non ottieni nulla.");
+                Interazioni.corrente().println("FALLIMENTO: Il tuo tentativo è inutile, non ottieni nulla.");
             }
         } else {
-            System.out.println("Scelta non valida! Prosegui oltre ignorando l'uomo.");
+            Interazioni.corrente().println("Scelta non valida! Prosegui oltre ignorando l'uomo.");
         }
     }
 }

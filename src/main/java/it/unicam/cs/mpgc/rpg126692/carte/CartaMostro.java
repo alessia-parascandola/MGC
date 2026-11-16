@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.carte;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.GestoreCombattimento;
 import it.unicam.cs.mpgc.rpg126692.dadi.DadoCapitolo;
@@ -65,7 +66,7 @@ public class CartaMostro extends CartaCapitolo{
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
-        System.out.println(getDescrizione());
+        Interazioni.corrente().println(getDescrizione());
 
         // Usa il costruttore vuoto (senza niente tra le parentesi)
         DadoCapitolo dadoCapitolo = new DadoCapitolo();

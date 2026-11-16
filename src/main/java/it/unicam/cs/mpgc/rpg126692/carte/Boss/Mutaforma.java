@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.carte.Boss;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.dadi.DadoCapitolo;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
@@ -12,7 +13,7 @@ public class Mutaforma extends CartaBoss{
                         "Alla fine di ogni turno di combattimento, se il Mutaforma non è stato sconfitto, " +
                         "cambia aspetto: rilancia tutti i suoi dadi Capitolo rimanenti.",
                 "/images/cassero/boss_mutaforma.png",
-                List.of(Simbolo.FORZA, Simbolo.FORZA, Simbolo.SAGGEZZA, Simbolo.SAGGEZZA), 3);
+                List.of(Simbolo.POSSANZA, Simbolo.POSSANZA, Simbolo.SAPIENZA, Simbolo.SAPIENZA), 3);
     }
 
     @Override
@@ -21,12 +22,12 @@ public class Mutaforma extends CartaBoss{
             int numeroSimboliRimanenti = getTracciatoSimboli().size();
             getTracciatoSimboli().clear();
 
-            System.out.println("Il Mutaforma cambia aspetto! Rilancio dei simboli rimanenti:");
+            Interazioni.corrente().println("Il Mutaforma cambia aspetto! Rilancio dei simboli rimanenti:");
             for (int i = 0; i < numeroSimboliRimanenti; i++) {
                 Simbolo nuovoSimbolo = dadoCapitolo.lancia();
                 getTracciatoSimboli().add(nuovoSimbolo);
             }
-            System.out.println("Nuovo tracciato: " + getTracciatoSimboli());
+            Interazioni.corrente().println("Nuovo tracciato: " + getTracciatoSimboli());
         }
     }
 }

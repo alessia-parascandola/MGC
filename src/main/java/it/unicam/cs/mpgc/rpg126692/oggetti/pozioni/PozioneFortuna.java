@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti.pozioni;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
@@ -12,7 +13,7 @@ public class PozioneFortuna extends Pozione {
 
     @Override
     public void usa(Personaggio utilizzatore, CartaMostro mostro) {
-        System.out.println("Usi Fortuna liquida! Rilanci il tuo Dado Personaggio!");
+        Interazioni.corrente().println("Usi Fortuna liquida! Rilanci il tuo Dado Personaggio!");
         // La logica del rilancio del dado verrà richiamata dal controller di combattimento
         super.usa(utilizzatore, mostro);
     }

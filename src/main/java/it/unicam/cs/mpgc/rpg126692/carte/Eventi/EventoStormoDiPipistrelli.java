@@ -7,7 +7,8 @@ import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 import java.util.List;
-import java.util.Scanner;
+import it.unicam.cs.mpgc.rpg126692.Interazione;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 public class EventoStormoDiPipistrelli extends CartaEvento{
 
@@ -20,20 +21,20 @@ public class EventoStormoDiPipistrelli extends CartaEvento{
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
-        System.out.println(getDescrizione());
+        Interazioni.corrente().println(getDescrizione());
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("\n[Premi INVIO per lanciare il dado e difenderti...]");
-        scanner.nextLine();
+        Interazione Interazione = Interazioni.corrente();
+        Interazioni.corrente().println("\n[Premi INVIO per lanciare il dado e difenderti...]");
+        Interazione.nextLine();
 
         FacciaDado faccia = personaggio.lanciaDado();
         Simbolo tiroGiocatore = faccia.getSimboloPrincipale();
         boolean eDoppio = faccia.isDoppio();
 
-        System.out.println("Hai tirato: " + tiroGiocatore + (eDoppio ? " (DOPPIO)" : ""));
+        Interazioni.corrente().println("Hai tirato: " + faccia.descrivi());
 
         if (eDoppio) {
-            System.out.println("-> DOPPIO! Respingi tutti i pipistrelli senza subire danni!");
+            Interazioni.corrente().println("-> DOPPIO! Respingi tutti i pipistrelli senza subire danni!");
             return;
         }
 
@@ -42,18 +43,18 @@ public class EventoStormoDiPipistrelli extends CartaEvento{
 
         for (int i = 1; i <= 3; i++) {
             Simbolo pipistrello = dadoCapitolo.lancia();
-            System.out.println("Pipistrello " + i + " attacca con: " + pipistrello);
+            Interazioni.corrente().println("Pipistrello " + i + " attacca con: " + pipistrello);
             if (pipistrello == tiroGiocatore) {
                 ferite++;
             }
         }
 
         if (ferite > 0) {
-            System.out.println("\n-> Subisci " + ferite + " ferita/e dai pipistrelli!");
+            Interazioni.corrente().println("\n-> Subisci " + ferite + " ferita/e dai pipistrelli!");
             personaggio.subisciDanno(ferite, false, false);
-            System.out.println("HP Attuali: [" + personaggio.getHP() + "/18]");
+            Interazioni.corrente().println("HP Attuali: [" + personaggio.getHP() + "/" + personaggio.getSaluteMassima() + "]");
         } else {
-            System.out.println("\n-> Nessun pipistrello ti ha colpito! Sei salvo.");
+            Interazioni.corrente().println("\n-> Nessun pipistrello ti ha colpito! Sei salvo.");
         }
     }
 }

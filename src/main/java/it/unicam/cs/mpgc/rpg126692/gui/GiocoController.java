@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.gui;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.Cassero;
 import it.unicam.cs.mpgc.rpg126692.carte.CartaCapitolo;
@@ -33,16 +34,18 @@ public class GiocoController {
     @FXML private ImageView imgDadoPersonaggio;
     @FXML private HBox containerDadiMostro;
     @FXML private Label lblHpPersonaggio;
+    @FXML private Label lblStanze;
     @FXML private Label lblNomePersonaggio;
     @FXML private HBox containerMano;
 
     private Personaggio personaggioGiocatore;
     private Cassero cassero;
+    private int totaleStanze;
     private CartaCapitolo cartaCapitoloCorrente;
     private MazzoOggetti mazzoOggetti = new MazzoOggetti();
 
-    // Gestione HP locale per la GUI per evitare blocchi da Scanner del backend
-    private int hpCorrentiGui;
+    // Impedisce azioni rientranti durante i dialoghi modali.
+    private boolean occupato;
 
     @FXML
     public void initialize() {
@@ -56,9 +59,7 @@ public class GiocoController {
 
     public void setPersonaggioGiocatore(Personaggio personaggio) {
         this.personaggioGiocatore = personaggio;
-        if (personaggio != null) {
-            this.hpCorrentiGui = personaggio.getHP();
-        }
+
 
         aggiornaGraficaPersonaggio();
 
@@ -75,82 +76,81 @@ public class GiocoController {
 
     public void setCassero(Cassero cassero) {
         this.cassero = cassero;
+        totaleStanze = cassero.carteRimanenti();
+        aggiornaContatoreStanze();
     }
 
     private void inizializzaCasseroDefault() {
         try {
             MazzoCapitoli mazzo = new MazzoCapitoli();
-            this.cassero = new Cassero(mazzo);
+            setCassero(new Cassero(mazzo));
         } catch (Exception e) {
             System.err.println("Info Cassero: " + e.getMessage());
         }
     }
 
-    // --- PESCA CARTA DAL CASSERO ---
     @FXML
     private void handlePescaCartaCassero(Event event) {
-        if (cartaCapitoloCorrente instanceof CartaMostro mostro && !mostro.eSconfitto()) {
-            mostraAvviso("Combattimento in corso", "Devi sconfiggere il mostro prima di avanzare!");
-            return;
-        }
-
-        if (cassero == null || !cassero.haCarte()) {
-            mostraAvviso("Fine Esplorazione", "Non ci sono più carte nel Cassero!");
-            if (imgMazzoCoperto != null) imgMazzoCoperto.setImage(null);
-            return;
-        }
-
-        cartaCapitoloCorrente = cassero.pescaProssimaCarta();
-
-        if (cartaCapitoloCorrente != null && cartaCapitoloCorrente.getImagePath() != null) {
+        if (occupato || personaggioGiocatore == null || personaggioGiocatore.isSconfitto()) return;
+        if (cassero == null || !cassero.haCarte()) return;
+        eseguiAzione(() -> {
+            for (Oggetto obj : personaggioGiocatore.getInventario().getOggetti()) {
+                if (obj instanceof it.unicam.cs.mpgc.rpg126692.oggetti.reliquie.FrammentoDellaFuria furia) furia.resetTurno();
+            }
+            cartaCapitoloCorrente = cassero.pescaProssimaCarta();
+            aggiornaContatoreStanze();
             caricaImmagineSuView(imgCartaScoperta, cartaCapitoloCorrente.getImagePath());
+            cartaCapitoloCorrente.esegui(personaggioGiocatore, mazzoOggetti);
+            if (personaggioGiocatore.eVivo() && cartaCapitoloCorrente instanceof CartaMostro mostro
+                    && mostro.eSconfitto() && !mazzoOggetti.isVuoto()) {
+                it.unicam.cs.mpgc.rpg126692.GestorePartita.gestisciAcquisizioneOggetto(personaggioGiocatore, mazzoOggetti.pesca());
+            }
+            if (personaggioGiocatore.isSconfitto() || !cassero.haCarte()) {
+                String esito = personaggioGiocatore.isSconfitto() ? "SCONFITTA" : "VITTORIA";
+                it.unicam.cs.mpgc.rpg126692.Interazioni.corrente().println(esito);
+                try {
+                    new it.unicam.cs.mpgc.rpg126692.StoricoPartite().salva(personaggioGiocatore.getNome(), esito);
+                } catch (java.io.IOException errore) {
+                    mostraAvviso("Errore salvataggio", errore.getMessage());
+                }
+            }
+        });
+    }
+
+    private void eseguiAzione(Runnable azione) {
+        if (occupato) return;
+        occupato = true;
+        InterazioneGrafica interazione = new InterazioneGrafica(this::aggiornaStato);
+        try {
+            it.unicam.cs.mpgc.rpg126692.Interazioni.esegui(interazione, azione);
+            interazione.mostraEsito();
+        } catch (RuntimeException errore) {
+            mostraAvviso("Errore durante la partita", errore.toString());
+        } finally {
+            occupato = false;
+            aggiornaStato();
         }
+    }
 
+    private void aggiornaContatoreStanze() {
+        if (lblStanze != null && cassero != null) {
+            lblStanze.setText("Stanza: " + (totaleStanze - cassero.carteRimanenti()) + "/" + totaleStanze);
+        }
+    }
+
+    private void aggiornaStato() {
+        aggiornaGraficaDado();
+        aggiornaGraficaPersonaggio();
+        aggiornaGraficaMani();
         aggiornaDorsoMazzo();
-
-        if (cartaCapitoloCorrente instanceof CartaMostro mostro) {
-            if (mostro.getTracciatoSimboli().isEmpty()) {
-                mostro.generaSimboliVita(new DadoCapitolo(), 1);
-            }
-            aggiornaGraficaDadiMostro(mostro.getTracciatoSimboli());
-        } else if (cartaCapitoloCorrente instanceof CartaBoss boss) {
-            if (boss.getTracciatoSimboli().isEmpty()) {
-                boss.generaSimboliVita(new DadoCapitolo(), 1);
-            }
-            aggiornaGraficaDadiMostro(boss.getTracciatoSimboli());
-        } else if (cartaCapitoloCorrente instanceof CartaEvento evento) {
-            svuotaDadiMostro();
-
-            // Creiamo un pop-up di scelta con due pulsanti (es. Opzione 1 / Opzione 2 o Sì / No)
-            javafx.scene.control.Alert alertScelta = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
-            alertScelta.setTitle("Scelta Evento");
-            alertScelta.setHeaderText("Decisione richiesta");
-            alertScelta.setContentText(cartaCapitoloCorrente.getDescrizione() + "\n\nScegli un'opzione:");
-
-            javafx.scene.control.ButtonType btnSi = new javafx.scene.control.ButtonType("Sì");
-            javafx.scene.control.ButtonType btnNo = new javafx.scene.control.ButtonType("No");
-
-            alertScelta.getButtonTypes().setAll(btnSi, btnNo);
-
-            java.util.Optional<javafx.scene.control.ButtonType> risultato = alertScelta.showAndWait();
-            boolean sceltaUtente = (risultato.isPresent() && risultato.get() == btnSi);
-
-            // Passiamo la scelta al backend (se il metodo accetta un booleano o un parametro di scelta)
-            // Se l'evento del backend richiede una gestione particolare basata su sceltaUtente, puoi passarla qui:
-            // evento.eseguiConScelta(personaggioGiocatore, mazzoOggetti, sceltaUtente);
-
-            // Per ora richiamiamo l'esecuzione standard o passiamo la gestione:
-            evento.esegui(personaggioGiocatore, mazzoOggetti);
-
-            aggiornaGraficaPersonaggio();
-            aggiornaGraficaMani();
-        } else {
-            svuotaDadiMostro();
-            if (cartaCapitoloCorrente != null) {
-                cartaCapitoloCorrente.esegui(personaggioGiocatore, mazzoOggetti);
-                aggiornaGraficaPersonaggio();
-                aggiornaGraficaMani(); // <--- FONDAMENTALE: Aggiorna le mani anche per le carte normali/oggetti
-            }
+        if (cartaCapitoloCorrente instanceof CartaMostro mostro) aggiornaGraficaDadiMostro(mostro.getTracciatoSimboli());
+        else svuotaDadiMostro();
+    }
+    private void aggiornaGraficaDado() {
+        if (personaggioGiocatore == null) return;
+        FacciaDado risultato = personaggioGiocatore.getUltimoRisultatoDado();
+        if (risultato != null) {
+            caricaImmagineSuView(imgDadoPersonaggio, risultato.getImagePath());
         }
     }
 
@@ -169,130 +169,44 @@ public class GiocoController {
         }
     }
 
-    // --- TIRO DADO PERSONAGGIO ---
     @FXML
     private void handleLancioDadoPersonaggio(Event event) {
-        if (personaggioGiocatore == null || personaggioGiocatore.getDado() == null) return;
-
-        if (!(cartaCapitoloCorrente instanceof CartaMostro mostro) || mostro.eSconfitto()) {
-            return;
-        }
-
-        FacciaDado facciaUscita = personaggioGiocatore.lanciaDado();
-        if (facciaUscita.getImagePath() != null) {
-            caricaImmagineSuView(imgDadoPersonaggio, facciaUscita.getImagePath());
-        }
-
-        List<Simbolo> simboliLanciati = facciaUscita.getSimboli();
-        boolean colpoSegnato = false;
-
-        for (Simbolo s : simboliLanciati) {
-            if (mostro instanceof CartaBoss boss) {
-                if (boss.puoRimuovereSimbolo(s)) {
-                    boss.rimuoviSimbolo(s);
-                    colpoSegnato = true;
-                    break;
-                }
-            } else if (mostro.haSimbolo(s)) {
-                mostro.rimuoviSimbolo(s);
-                colpoSegnato = true;
-                break;
-            }
-        }
-
-        if (colpoSegnato) {
-            aggiornaGraficaDadiMostro(mostro.getTracciatoSimboli());
-
-            if (mostro.eSconfitto()) {
-                // Pesca automatica dell'oggetto a fine combattimento tramite il backend
-                if (mazzoOggetti != null && personaggioGiocatore != null) {
-                    Oggetto ricompensa = mazzoOggetti.pesca();
-                    if (ricompensa != null) {
-                        boolean aggiunto = personaggioGiocatore.getInventario().aggiungi(ricompensa);
-                        if (aggiunto) {
-                            aggiornaGraficaMani(); // <--- FONDAMENTALE PER AGGIORNARE LE MANI A SCHERMO
-                            mostraAvviso("Vittoria e Ricompensa!", "Hai ottenuto: " + ricompensa.getNome());
-                        }
-                    }
-                }
-                svuotaDadiMostro();
-            } else {
-                mostraAvviso("Colpo a segno!", "Hai colpito il mostro! Un simbolo è stato eliminato.");
-            }
-        } else {
-            int dannoBase = mostro.getDanno();
-            boolean haScudoDado = facciaUscita.haScudo();
-
-            if (haScudoDado) {
-                mostraAvviso("Attacco Parato!", "Il doppio simbolo/scudo sul dado ha parato completamente l'attacco!");
-            } else {
-                Oggetto pozioneTrovata = null;
-                if (personaggioGiocatore.getInventario() != null && personaggioGiocatore.getInventario().getOggetti() != null) {
-                    for (Oggetto obj : personaggioGiocatore.getInventario().getOggetti()) {
-                        if (obj.getNome() != null && obj.getNome().toLowerCase().contains("pozione")) {
-                            pozioneTrovata = obj;
-                            break;
-                        }
-                    }
-                }
-
-                if (pozioneTrovata != null) {
-                    // Sfrutta il metodo chiediConfermaPopup che hai già in fondo al controller
-                    boolean usaPozione = chiediConfermaPopup("Usa Pozione", "Vuoi utilizzare la pozione per evitare di subire i danni?");
-                    if (usaPozione) {
-                        // Rimuove la pozione dall'inventario
-                        personaggioGiocatore.getInventario().getOggetti().remove(pozioneTrovata);
-                        aggiornaGraficaMani(); // Ridisegna l'HBox rimuovendo l'icona
-                        mostraAvviso("Pozione Usata", "Hai bevuto la pozione e evitato i danni del mostro!");
-                        return; // Interrompe il metodo: il danno non viene applicato!
-                    }
-                }
-
-                int riduzioneScudo = 0;
-                for (Oggetto obj : personaggioGiocatore.getInventario().getOggetti()) {
-                    if (obj.getNome().toLowerCase().contains("scudo")) {
-                        riduzioneScudo = 1;
-                        break;
-                    }
-                }
-
-                int dannoEffettivo = dannoBase;
-                if (riduzioneScudo > 0 && dannoBase > 1) {
-                    dannoEffettivo = Math.max(1, dannoBase - riduzioneScudo);
-                }
-
-                // Sfruttiamo subisciDanno del backend o sottraiamo direttamente e sincronizziamo
-                personaggioGiocatore.subisciDanno(dannoEffettivo, false, false);
-                aggiornaGraficaPersonaggio();
-
-                if (personaggioGiocatore.isSconfitto()) {
-                    mostraAvviso("Game Over", "Il tuo personaggio è stato sconfitto!");
-                } else {
-                    if (riduzioneScudo > 0 && dannoBase > 1) {
-                        mostraAvviso("Attacco Subito!", "Lo scudo ha ridotto il danno! Subisci " + dannoEffettivo + " danni.");
-                    } else {
-                        mostraAvviso("Attacco Subito!", "Nessun simbolo corrispondente! Subisci " + dannoEffettivo + " danni.");
-                    }
-                }
-            }
-        }
-    }
-
-    @FXML
-    private void handlePescaOggetto(Event event) {
-        // Disabilitato momentaneamente
+        if (!occupato) mostraAvviso("Dado", "I lanci si eseguono nei dialoghi della stanza.");
     }
 
     @FXML
     private void handleUsaOggetto(Event event) {
-        mostraAvviso("Inventario", "Usa oggetto.");
+        if (personaggioGiocatore == null || personaggioGiocatore.isSconfitto() || !cassero.haCarte()) return;
+        eseguiAzione(() -> {
+            var oggetti = personaggioGiocatore.getInventario().getOggetti();
+            if (oggetti.isEmpty()) return;
+            javafx.scene.control.ChoiceDialog<Oggetto> scelta = new javafx.scene.control.ChoiceDialog<>(oggetti.get(0), oggetti);
+            scelta.setHeaderText("Scegli un oggetto da usare");
+            scelta.showAndWait().ifPresent(obj -> obj.usa(personaggioGiocatore, null));
+        });
     }
 
     @FXML
     private void handleScartaOggetto(Event event) {
-        mostraAvviso("Inventario", "Scarta oggetto.");
+        if (personaggioGiocatore == null || personaggioGiocatore.isSconfitto()) return;
+        eseguiAzione(() -> {
+            var oggetti = personaggioGiocatore.getInventario().getOggetti();
+            if (oggetti.isEmpty()) return;
+            javafx.scene.control.ChoiceDialog<Oggetto> scelta = new javafx.scene.control.ChoiceDialog<>(oggetti.get(0), oggetti);
+            scelta.setHeaderText("Scegli un oggetto da scartare");
+            scelta.showAndWait().ifPresent(obj -> personaggioGiocatore.getInventario().scarta(oggetti.indexOf(obj)));
+        });
     }
-
+    @FXML
+    private void handleStorico(Event event) {
+        if (occupato) return;
+        try {
+            var righe = new it.unicam.cs.mpgc.rpg126692.StoricoPartite().leggi();
+            mostraAvviso("Storico partite", righe.isEmpty() ? "Nessuna partita conclusa." : String.join("\n", righe));
+        } catch (java.io.IOException errore) {
+            mostraAvviso("Errore lettura storico", errore.getMessage());
+        }
+    }
     // --- REFRESH GRAFICO ---
 
     private void aggiornaGraficaDadiMostro(List<Simbolo> simboliDadi) {
@@ -324,7 +238,7 @@ public class GiocoController {
 
     private void aggiornaGraficaPersonaggio() {
         if (personaggioGiocatore != null) {
-            javafx.application.Platform.runLater(() -> {
+            {
                 // 1. Aggiorna HP con scritta bianca e dimensione leggibile
                 if (lblHpPersonaggio != null) {
                     lblHpPersonaggio.setText("HP: " + personaggioGiocatore.getHP() + " / " + personaggioGiocatore.getSaluteMassima());
@@ -336,7 +250,7 @@ public class GiocoController {
                     lblNomePersonaggio.setText(personaggioGiocatore.getNome());
                     lblNomePersonaggio.setStyle("-fx-text-fill: white;");
                 }
-            });
+            }
 
             // 3. Aggiorniamo l'immagine della carta del personaggio
             if (imgPersonaggio != null) {
@@ -347,7 +261,7 @@ public class GiocoController {
     }
 
     private void aggiornaGraficaMani() {
-        javafx.application.Platform.runLater(() -> {
+        {
             if (containerMano == null) return;
 
             containerMano.getChildren().clear(); // Pulisce la grafica precedente
@@ -365,8 +279,7 @@ public class GiocoController {
                     if (!path.startsWith("/")) {
                         path = "/" + path;
                     }
-                    try {
-                        InputStream is = getClass().getResourceAsStream(path);
+                    try (InputStream is = getClass().getResourceAsStream(path)) {
                         if (is != null) {
                             imgOggetto.setImage(new Image(is));
                             // Imposta le dimensioni della miniatura dell'oggetto nell'HBox
@@ -384,13 +297,12 @@ public class GiocoController {
                     }
                 }
             }
-        });
+        }
     }
 
     private void caricaImmagineSuView(ImageView imageView, String resourcePath) {
         if (imageView == null || resourcePath == null) return;
-        try {
-            InputStream is = getClass().getResourceAsStream(resourcePath);
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
             if (is != null) {
                 imageView.setImage(new Image(is));
             } else {

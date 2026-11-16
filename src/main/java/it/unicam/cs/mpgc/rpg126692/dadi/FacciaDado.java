@@ -34,6 +34,11 @@ public class FacciaDado {
 
     public String getImagePath(){ return imagePath; }
 
+    /** Descrizione completa del risultato, inclusi entrambi i simboli di un doppio. */
+    public String descrivi() {
+        return simboli.toString() + (isDoppio() ? " (DOPPIO)" : "") + (haScudo() ? " (Scudo)" : "");
+    }
+
     // Restituisce il simbolo primario presente sulla faccia
     public Simbolo getSimboloPrincipale() {
         return simboli.get(0);

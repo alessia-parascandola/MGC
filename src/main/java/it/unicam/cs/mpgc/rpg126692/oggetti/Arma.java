@@ -1,4 +1,5 @@
 package it.unicam.cs.mpgc.rpg126692.oggetti;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 import it.unicam.cs.mpgc.rpg126692.carte.CartaMostro;
 import it.unicam.cs.mpgc.rpg126692.dadi.Simbolo;
@@ -18,7 +19,7 @@ public class Arma extends Oggetto {
 
     @Override
     public void usa(Personaggio utilizzatore, CartaMostro mostro) {
-        System.out.println("Hai equipaggiato " + getNome() + "! (" + maniRichieste + " mani occupate)");
+        Interazioni.corrente().println("Hai equipaggiato " + getNome() + "! (" + maniRichieste + " mani occupate)");
     }
 
     // Getter

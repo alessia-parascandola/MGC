@@ -7,7 +7,8 @@ import it.unicam.cs.mpgc.rpg126692.oggetti.MazzoOggetti;
 import it.unicam.cs.mpgc.rpg126692.personaggi.Personaggio;
 
 import java.util.List;
-import java.util.Scanner;
+import it.unicam.cs.mpgc.rpg126692.Interazione;
+import it.unicam.cs.mpgc.rpg126692.Interazioni;
 
 public class EventoLameOscillanti extends CartaEvento {
 
@@ -21,36 +22,36 @@ public class EventoLameOscillanti extends CartaEvento {
 
     @Override
     public void esegui(Personaggio personaggio, MazzoOggetti mazzoOggetti) {
-        System.out.println("\n--- EVENTO: LAME OSCILLANTI ---");
-        System.out.println(getDescrizione());
+        Interazioni.corrente().println("\n--- EVENTO: LAME OSCILLANTI ---");
+        Interazioni.corrente().println(getDescrizione());
 
-        Scanner scanner = new Scanner(System.in);
+        Interazione Interazione = Interazioni.corrente();
         DadoCapitolo dadoCapitolo = new DadoCapitolo();
 
         for (int i = 1; i <= 3; i++) {
             if (personaggio.isSconfitto()) break;
 
-            System.out.println("\n--- SCHIVATA " + i + "/3 ---");
-            System.out.println("[Premi INVIO per schivare la lama...]");
-            scanner.nextLine();
+            Interazioni.corrente().println("\n--- SCHIVATA " + i + "/3 ---");
+            Interazioni.corrente().println("[Premi INVIO per schivare la lama...]");
+            Interazione.nextLine();
 
             Simbolo simboloLama = dadoCapitolo.lancia();
-            System.out.println("Movimento Trappola (Lama): " + simboloLama);
+            Interazioni.corrente().println("Movimento Trappola (Lama): " + simboloLama);
 
             FacciaDado faccia = personaggio.lanciaDado();
             Simbolo tiroGiocatore = faccia.getSimboloPrincipale();
             boolean eDoppio = faccia.isDoppio();
 
-            System.out.println("Tuo tiro: " + tiroGiocatore + (eDoppio ? " (DOPPIO)" : ""));
+            Interazioni.corrente().println("Tuo tiro: " + faccia.descrivi());
 
             if (eDoppio) {
-                System.out.println("-> Hai ottenuto un DOPPIO! Schivi perfettamente la lama!");
+                Interazioni.corrente().println("-> Hai ottenuto un DOPPIO! Schivi perfettamente la lama!");
             } else if (tiroGiocatore == simboloLama) {
-                System.out.println("-> Vieni colpito dalle lame! Perdi 2 HP.");
+                Interazioni.corrente().println("-> Vieni colpito dalle lame! Perdi 2 HP.");
                 personaggio.subisciDanno(2, false, false);
-                System.out.println("HP Attuali: [" + personaggio.getHP() + "/18]");
+                Interazioni.corrente().println("HP Attuali: [" + personaggio.getHP() + "/" + personaggio.getSaluteMassima() + "]");
             } else {
-                System.out.println("-> Eviti le lame con successo.");
+                Interazioni.corrente().println("-> Eviti le lame con successo.");
             }
         }
     }
